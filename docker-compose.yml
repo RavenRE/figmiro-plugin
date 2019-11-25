@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  web:
+    image: web
+    command: ['npm', 'run', 'server']
+    restart: always
+    deploy:
+      restart_policy:
+        condition: any
+    ports:
+      - "8000:8000"

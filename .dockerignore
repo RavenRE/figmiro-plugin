@@ -1,0 +1,6 @@
+.git
+.vscode
+.idea
+npm-debug
+node_modules
+build
