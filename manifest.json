@@ -2,6 +2,6 @@
   "name": "from-figma-to-miro",
   "id": "780840481400234587",
   "api": "1.0.0",
-  "main": "code.js",
-  "ui": "ui.html"
+  "main": "build/main.js",
+  "ui": "build/index.html"
 }

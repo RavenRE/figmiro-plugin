@@ -1,7 +1,7 @@
 {
-  "name": "ts-boilerplate",
+  "name": "from-figma-to-miro",
   "version": "0.0.1",
-  "description": "TS boilerplate",
+  "description": "Figma Integration with Miro",
   "main": "index.ts",
   "scripts": {
     "dev": "NODE_ENV=development webpack-dev-server --config=config/webpack.dev.ts",
@@ -17,10 +17,10 @@
     "url": "git@git.redmadrobot.com:web-frontend/ts-boilerplate.git"
   },
   "engines": {
-    "node": ">=8.0 <=11.10"
+    "node": ">=8.0 <=13.1"
   },
   "engineStrict": true,
-  "author": "Anton Eryshev, Roman Belov, Ilya Krupnov",
+  "author": "RMR MSK",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.19.0",
