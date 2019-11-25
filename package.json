@@ -4,7 +4,7 @@
   "description": "Figma Integration with Miro",
   "main": "index.ts",
   "scripts": {
-    "dev": "NODE_ENV=development webpack-dev-server --config=config/webpack.dev.ts",
+    "dev": "NODE_ENV=development webpack --config=config/webpack.prod.ts --watch",
     "build": "NODE_ENV=production webpack --config=config/webpack.prod.ts",
     "test": "jest --no-cache -c .jestrc.json --coverage",
     "test:dev": "jest --watch -c .jestrc.json",
@@ -17,16 +17,12 @@
     "url": "git@git.redmadrobot.com:web-frontend/ts-boilerplate.git"
   },
   "engines": {
-    "node": ">=8.0 <=13.1"
+    "node": ">=10.0 <=13.1"
   },
   "engineStrict": true,
   "author": "RMR MSK",
   "license": "ISC",
   "dependencies": {
-    "axios": "^0.19.0",
-    "lodash": "^4.17.15",
-    "mobx": "^5.13.0",
-    "mobx-react": "^6.1.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6"
   },
@@ -62,7 +58,6 @@
     "mini-css-extract-plugin": "^0.8.0",
     "node-sass": "^4.12.0",
     "postcss-loader": "^3.0.0",
-    "react-hot-loader": "^4.12.17",
     "sass-lint": "^1.13.1",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
@@ -75,8 +70,6 @@
     "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.38.0",
     "webpack-cli": "^3.3.6",
-    "webpack-dev-server": "^3.7.2",
-    "webpack-merge": "^4.2.2",
-    "webpack-svgstore-plugin": "^4.1.0"
+    "webpack-merge": "^4.2.2"
   }
 }

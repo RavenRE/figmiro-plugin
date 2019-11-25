@@ -7,17 +7,14 @@ import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import {TsconfigPathsPlugin} from 'tsconfig-paths-webpack-plugin';
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const SvgStore = require('webpack-svgstore-plugin');
-
 import autoprefixer from 'autoprefixer';
 import cssnano from 'cssnano';
 import {src, dist} from './config';
+const {version} = require('../package.json');
 
 const {NODE_ENV} = process.env;
 const isProd = NODE_ENV === 'production';
 const isDev = !isProd;
-
-const {version} = require('../package.json');
 
 module.exports = {
   output: {
@@ -48,8 +45,7 @@ module.exports = {
             ],
             plugins: [
               ['@babel/plugin-proposal-decorators', {legacy: true}],
-              ['@babel/plugin-proposal-class-properties', {loose: true}],
-              isDev ? 'react-hot-loader/babel' : false
+              ['@babel/plugin-proposal-class-properties', {loose: true}]
             ].filter(Boolean)
           }
         }
@@ -129,21 +125,6 @@ module.exports = {
       IS_PROD: isProd,
       IS_DEV: isDev
     }),
-    new ForkTsCheckerWebpackPlugin(),
-    new SvgStore({
-      svgoOptions: {
-        plugins: [
-          {removeTitle: true},
-          {
-            removeDesc: {
-              removeAny: true
-            }
-          },
-          {collapseGroups: true},
-          {removeStyleElement: true}
-        ]
-      },
-      prefix: 'icon-'
-    })
+    new ForkTsCheckerWebpackPlugin()
   ]
 };
