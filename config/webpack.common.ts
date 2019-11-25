@@ -107,23 +107,7 @@ module.exports = {
     module: 'empty'
   },
   optimization: {
-    minimizer: [new UglifyJsPlugin()],
-    splitChunks: {
-      name: true,
-      cacheGroups: {
-        common: {
-          chunks: 'initial',
-          minChunks: 2
-        },
-        vendors: {
-          test: /[\\/]node_modules[\\/]/,
-          chunks: 'all',
-          priority: -10,
-          filename: isProd ? 'vendor.[contenthash].js' : 'vendor.[hash].js'
-        }
-      }
-    },
-    runtimeChunk: true
+    minimizer: [new UglifyJsPlugin()]
   },
   plugins: [
     new CleanWebpackPlugin(),
@@ -133,6 +117,7 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: path.join(src, 'index.html'),
+      inject: false,
       hash: isProd,
       minify: isProd && {
         removeComments: true,
