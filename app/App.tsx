@@ -1,4 +1,17 @@
 import React from 'react';
-import { Button } from '@components/Button/Button';
 
-export const App = () => <h1><Button /></h1>;
+export const App = () =>
+  <h1>
+    wefefwefwefwef
+    ewfwefwef
+    ewfewfwef
+    ewfwefwef
+    we
+    fwefwefwef
+    wef
+    we
+    fwef
+    wef
+    wef
+    we
+  </h1>;

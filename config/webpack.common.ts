@@ -1,6 +1,7 @@
 /* tslint:disable:no-default-export strict-boolean-expressions no-require-imports no-var-requires*/
 import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
 import {CleanWebpackPlugin} from 'clean-webpack-plugin';
 import { DefinePlugin } from 'webpack';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
@@ -21,7 +22,10 @@ module.exports = {
     path: dist,
     filename: '[name].js'
   },
-  entry: path.join(src, 'index.tsx'),
+  entry: {
+    ui: path.join(src, 'ui.tsx'),
+    main: path.join(src, 'index.tsx')
+  },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
     plugins: [new TsconfigPathsPlugin({
@@ -113,17 +117,12 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: path.join(src, 'index.html'),
-      inject: false,
-      hash: isProd,
-      minify: isProd && {
-        removeComments: true,
-        collapseWhitespace: true
-      }
+      chunks: ['ui'],
+      inlineSource: '.(js|css)$'
     }),
+    new HtmlWebpackInlineSourcePlugin(),
     new DefinePlugin({
-      VERSION: JSON.stringify(version),
-      IS_PROD: isProd,
-      IS_DEV: isDev
+      VERSION: JSON.stringify(version)
     }),
     new ForkTsCheckerWebpackPlugin()
   ]
