@@ -21,7 +21,10 @@
     "strictNullChecks": true,
     "baseUrl": "./app",
     "paths": {
-      "@components/*": ["components/*"]
+      "components/*": ["components/*"],
+      "utils/*": ["utils/*"],
+      "services/*": ["services/*"],
+      "transport/*": ["transport/*"]
     }
   }
 }
