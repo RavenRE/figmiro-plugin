@@ -24,7 +24,8 @@
       "components/*": ["components/*"],
       "utils/*": ["utils/*"],
       "services/*": ["services/*"],
-      "transport/*": ["transport/*"]
+      "transport/*": ["transport/*"],
+      "pages/*": ["pages/*"]
     }
   }
 }

@@ -10,9 +10,10 @@ import {TsconfigPathsPlugin} from 'tsconfig-paths-webpack-plugin';
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 import autoprefixer from 'autoprefixer';
 import cssnano from 'cssnano';
-import {src, dist} from './config';
 const {version} = require('../package.json');
 
+const dist = path.resolve('build');
+const src = path.resolve('./app');
 const {NODE_ENV} = process.env;
 const isProd = NODE_ENV === 'production';
 const isDev = !isProd;

@@ -1,4 +1,5 @@
 import React from 'react';
-import {SignIn} from './SignIn/SignIn';
+import {InstallAppPage} from 'pages/InstallApp/InstallAppPage';
 
-export const App = () => <SignIn/>;
+export const App = () =>
+  <InstallAppPage/>;
