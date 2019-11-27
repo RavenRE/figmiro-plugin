@@ -9,6 +9,7 @@
     "rules": {
         "no-any": true,
         "interface-name": false,
+        "interface-over-type-literal": false,
         "no-inferrable-types": true,
         "no-magic-numbers": false,
         "no-non-null-assertion": true,

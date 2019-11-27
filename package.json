@@ -1,5 +1,5 @@
 {
-  "name": "from-figma-to-miro",
+  "name": "figma2miro",
   "version": "0.0.1",
   "description": "Figma Integration with Miro",
   "main": "index.ts",
@@ -27,7 +27,8 @@
     "babel-polyfill": "^6.26.0",
     "lodash": "^4.17.15",
     "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react-dom": "^16.8.6",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "@babel/core": "^7.7.2",
@@ -48,6 +49,7 @@
     "@types/node": "^12.6.8",
     "@types/react": "^16.8.23",
     "@types/react-dom": "^16.8.5",
+    "@types/uuid": "^3.4.6",
     "@types/webpack": "^4.32.1",
     "@types/webpack-merge": "^4.1.5",
     "autoprefixer": "^9.6.1",
