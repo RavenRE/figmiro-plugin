@@ -2,14 +2,10 @@ import React from 'react';
 import {createBoard} from 'transport/boards';
 import {API_URL, MIRO_APP_CLIENT_ID} from 'services/api-config';
 
-type Props = {
-  stateValue: string;
-};
-
-export const InstallAppPage: React.FC<Props> = ({stateValue}) => {
+export const InstallAppPage = () => {
   const link =
-    `https://miro.com/oauth/authorize?state=${stateValue
-     }&response_type=code&client_id=${MIRO_APP_CLIENT_ID}&redirect_uri=${API_URL}/oauth`;
+    `https://miro.com/oauth/authorize?state=${'123'
+    }&response_type=code&client_id=${MIRO_APP_CLIENT_ID}&redirect_uri=${API_URL}/oauth`;
   return (
     <div>
       <a

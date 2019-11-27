@@ -25,7 +25,9 @@
       "utils/*": ["utils/*"],
       "services/*": ["services/*"],
       "transport/*": ["transport/*"],
-      "pages/*": ["pages/*"]
+      "pages/*": ["pages/*"],
+      "modules/*": ["modules/*"],
+      "rootController": ["modules/rootController.ts"]
     }
   }
 }
