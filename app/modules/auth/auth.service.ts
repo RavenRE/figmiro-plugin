@@ -1,5 +1,6 @@
 import uuidv1 from 'uuid/v1';
 import uuidv5 from 'uuid/v5';
+import {request} from 'services/request';
 import {sendMessageToFigma, MESSAGE_EVENT, FigmaMessage} from 'services/sendMessageToFigma';
 import {GET_STATE, SET_STATE, STATE_RECEIVED} from './auth.message.types';
 
@@ -43,5 +44,22 @@ export async function receiveStateValueFromStorage(figma: PluginAPI, msg: FigmaM
       const value = await figma.clientStorage.getAsync(STATE_STORAGE_KEY);
       figma.ui.postMessage({type: STATE_RECEIVED, value});
       break;
+  }
+}
+
+type CheckAuthResponse = {
+  isAuthorized: boolean;
+};
+export async function checkIsAuth(state: string): Promise<boolean> {
+  try {
+    const response = await request.get<CheckAuthResponse>(
+      '/oauth/check',
+      {
+        params: {state}
+      }
+    );
+    return response.data.isAuthorized;
+  } catch (error) {
+    throw error;
   }
 }

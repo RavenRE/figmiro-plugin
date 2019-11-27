@@ -6,6 +6,8 @@ import {API_URL, MIRO_APP_CLIENT_ID} from 'services/api-config';
 
 @connect(ROOT_CONTROLLER_KEY)
 export class AuthComponent extends React.Component {
+  private intervalId?: number;
+
   render(): React.ReactNode {
     if (!this.link) return null;
     return (
@@ -18,7 +20,14 @@ export class AuthComponent extends React.Component {
   }
 
   async componentDidMount() {
-    await this.rootController.authController.fetchStateValue();
+    this.intervalId = window.setInterval(
+      this.rootController.authController.fetchCheckAuth,
+      2000
+    );
+  }
+
+  componentWillUnmount() {
+    window.clearInterval(this.intervalId);
   }
 
   private get link(): string | undefined {
