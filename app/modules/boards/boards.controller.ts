@@ -1,10 +1,11 @@
 import {observable, action} from 'mobx';
-import {Boards} from './boards.entity';
+import {Boards, Board} from './boards.entity';
 import {getAllBoards} from './boards.service';
 import {RootController} from 'rootController';
 
 export class BoardsController {
   @observable boards: Boards = [];
+  @observable selectedBoard?: Board;
   @observable fetching = false;
   @observable error = '';
 
@@ -17,6 +18,8 @@ export class BoardsController {
     try {
       this.fetching = true;
       this.boards = await getAllBoards(stateValue);
+      if (!this.boards.length) return;
+      this.selectedBoard = this.boards[0];
     } catch (error) {
       this.error = error;
     } finally {

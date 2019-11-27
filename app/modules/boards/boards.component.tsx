@@ -12,13 +12,13 @@ export class BoardsComponent extends React.Component {
     return (
       <div>
         {boards.map(board =>
-          <div key={board.id}>{board.id}</div>
+          <div key={board.id}>{board.name}</div>
         )}
       </div>
     );
   }
 
-  async componentDidMount() {
+  async componentDidMount(): Promise<void> {
     await this.rootController.boardsController.fetchBoards();
   }
 
