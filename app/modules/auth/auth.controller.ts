@@ -25,6 +25,7 @@ export class AuthController {
       this.isAuth = await checkIsAuth(this.stateValue);
     } catch (error) {
       this.error = '';
+      throw this.error;
     }
   }
 }

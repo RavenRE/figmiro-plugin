@@ -11,7 +11,14 @@ const {
   }
 } = rootController;
 (async () => {
-  await fetchStateValue();
-  await fetchCheckAuth();
-  ReactDOM.render(<App/>, document.getElementById('root'));
+  try {
+    await fetchStateValue();
+    await fetchCheckAuth();
+  } finally {
+    render();
+  }
 })();
+
+function render(): void {
+  ReactDOM.render(<App/>, document.getElementById('root'));
+}

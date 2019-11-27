@@ -19,16 +19,17 @@ export class AuthComponent extends React.Component {
     );
   }
 
-  async componentDidMount() {
-    this.intervalId = window.setInterval(
-      this.rootController.authController.fetchCheckAuth,
-      2000
-    );
+  componentDidMount() {
+    this.intervalId = window.setInterval(this.checkOnInterval, 2000);
   }
 
   componentWillUnmount() {
     window.clearInterval(this.intervalId);
   }
+
+  private checkOnInterval = async (): Promise<void> => {
+    await this.rootController.authController.fetchCheckAuth();
+  };
 
   private get link(): string | undefined {
     const {
