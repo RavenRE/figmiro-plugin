@@ -6,11 +6,8 @@ export class AuthController {
   @observable stateValue = '';
   @observable error = '';
   @observable isAuth = false;
-  private readonly rootController: RootController;
 
-  constructor(rootController: RootController) {
-    this.rootController = rootController;
-  }
+  constructor(private readonly rootController: RootController) {}
 
   @action.bound async fetchStateValue(): Promise<void> {
     try {
