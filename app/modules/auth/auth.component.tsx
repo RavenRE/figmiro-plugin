@@ -10,14 +10,15 @@ export class AuthComponent extends React.Component {
     if (!this.link) return null;
     return (
       <div>
-        <a
-          target="_blank"
-          href={this.link}
-        >
+        <a target="_blank" href={this.link}>
           Install App
         </a>
       </div>
     );
+  }
+
+  async componentDidMount() {
+    await this.rootController.authController.fetchStateValue();
   }
 
   private get link(): string | undefined {

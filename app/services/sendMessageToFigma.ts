@@ -1,5 +1,12 @@
 /* tslint:disable:no-any*/
-export function sendMessageToFigma(type: string, value?: any): void {
+
+export type FigmaMessage = {
+  type: string;
+  value?: any;
+};
+
+export const MESSAGE_EVENT = 'message';
+export function sendMessageToFigma({type, value}: FigmaMessage): void {
   parent.postMessage({
     pluginMessage: {
       type,
