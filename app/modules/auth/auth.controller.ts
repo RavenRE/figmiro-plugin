@@ -3,8 +3,8 @@ import {RootController} from 'rootController';
 import {getStateValue, checkIsAuth} from './auth.service';
 
 export class AuthController {
-  @observable stateValue = '';
-  @observable error = '';
+  @observable stateValue?: string;
+  @observable error?: string;
   @observable isAuth = false;
 
   constructor(private readonly rootController: RootController) {}
@@ -19,7 +19,9 @@ export class AuthController {
 
   @action.bound async fetchCheckAuth(): Promise<void> {
     try {
-      this.isAuth = await checkIsAuth(this.stateValue);
+      if (this.stateValue) {
+        this.isAuth = await checkIsAuth(this.stateValue);
+      }
     } catch (error) {
       this.error = '';
       throw this.error;

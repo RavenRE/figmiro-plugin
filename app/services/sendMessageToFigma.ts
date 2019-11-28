@@ -1,8 +1,8 @@
 /* tslint:disable:no-any*/
 
-export type FigmaMessage = {
+export type FigmaMessage<T = any> = {
   type: string;
-  value?: any;
+  value?: T;
 };
 
 export const MESSAGE_EVENT = 'message';

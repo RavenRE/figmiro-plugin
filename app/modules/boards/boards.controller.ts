@@ -17,6 +17,7 @@ export class BoardsController {
     } = this.rootController;
     try {
       this.fetching = true;
+      if (!stateValue) return;
       this.boards = await getAllBoards(stateValue);
       if (!this.boards.length) return;
       this.selectedBoard = this.boards[0];
