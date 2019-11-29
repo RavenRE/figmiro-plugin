@@ -8,10 +8,11 @@ import {SettingsComponent} from 'modules/settings';
 @connect(ROOT_CONTROLLER_KEY)
 export class MainComponent extends React.Component {
   render(): React.ReactNode {
-    const {
-      authController: {isAuth}
-    } = this.rootController;
-    return isAuth ? <SettingsComponent/> : <AuthComponent/>;
+    // const {
+    //   authController: {isAuth}
+    // } = this.rootController;
+    // return isAuth ? <SettingsComponent/> : <AuthComponent/>;
+    return <SettingsComponent/>;
   }
 
   private get rootController(): RootController {

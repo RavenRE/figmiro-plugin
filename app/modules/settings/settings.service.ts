@@ -6,12 +6,12 @@ import {IMAGES_EXPORTED, SYNC_ALL} from './settings.message.types';
 class SyncAllDTO {
   constructor(readonly boardId: string) {}
 }
-export function requestSyncAll(state: string, board: Board) {
+export function requestSyncAll(board: Board) {
   const onMessageEvent = async (event: MessageEvent): Promise<void> => {
     const {pluginMessage} = event.data;
     switch (pluginMessage.type) {
       case IMAGES_EXPORTED:
-        await createImagesInMiro(state, board.id, pluginMessage.value);
+        await createImagesInMiro(board.id, pluginMessage.value);
         break;
     }
   };
@@ -30,6 +30,6 @@ export async function processSyncAll(figma: PluginAPI, msg: FigmaMessage<SyncAll
   }
 }
 
-export async function createImagesInMiro(state: string, boardId: string, images: string): Promise<void> {
-  await request.post(`/pictures?state=${state}`, {boardId, images});
+export async function createImagesInMiro(boardId: string, images: string): Promise<void> {
+  await request.post('/pictures', {boardId, images});
 }

@@ -8,11 +8,7 @@ export class SettingsController {
 
   @action.bound syncAll(): void {
     if (!this.selectedBoard) return;
-    const {
-      authController: {stateValue}
-    } = this.rootController;
-    if (!stateValue) return;
-    requestSyncAll(stateValue, this.selectedBoard);
+    requestSyncAll(this.selectedBoard);
   }
 
   get selectedBoard(): Board | undefined {
