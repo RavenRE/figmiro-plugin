@@ -4,17 +4,26 @@ import {BoardsComponent} from 'modules/boards';
 import {ROOT_CONTROLLER_KEY} from 'modules/ROOT_CONTROLLER_KEY';
 import {InjectedProps, RootController} from 'rootController';
 
-@connect(ROOT_CONTROLLER_KEY)
+@connect()
 export class SettingsComponent extends React.Component {
   render(): React.ReactNode {
     const {
-      settingsController: {syncAll}
+      settingsController: {
+        changeSyncType,
+        sync
+      }
     } = this.rootController;
     return (
       <div>
         Settings
         <BoardsComponent/>
-        <button onClick={syncAll}>Sync</button>
+        <select
+          onChange={(event) => {changeSyncType(event.nativeEvent.target.value)}}
+        >
+          <option value="all">All</option>
+          <option value="selection">Selection</option>
+        </select>
+        <button onClick={sync}>Sync</button>
       </div>
     );
   }

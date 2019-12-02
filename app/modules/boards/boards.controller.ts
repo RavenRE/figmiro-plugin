@@ -1,4 +1,4 @@
-import {observable, action} from 'mobx';
+import {observable, action, computed} from 'mobx';
 import {Boards, Board} from './boards.entity';
 import {getAllBoards} from './boards.service';
 import {RootController} from 'rootController';
@@ -25,5 +25,17 @@ export class BoardsController {
     } finally {
       this.fetching = false;
     }
+  }
+
+  @action.bound selectBoard(id: string): void {
+    this.selectedBoard = this.boards.find((board: Board) => board.id === id);
+  }
+
+  @action.bound resetSelectedBoard(): void {
+    this.selectedBoard = void 0;
+  }
+
+  @computed get selectedBoardId(): string | void {
+    return (this.selectedBoard || {}).id;
   }
 }

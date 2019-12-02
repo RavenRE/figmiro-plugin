@@ -1,6 +1,6 @@
 export type Board = {
   id: string;
-  name: string;
+  title: string;
 };
 
 export type Boards = Board[];

@@ -1,12 +1,17 @@
 import {request} from 'services/request';
 import {FigmaMessage, MESSAGE_EVENT, sendMessageToFigma} from 'services/sendMessageToFigma';
 import {Board} from 'modules/boards';
-import {IMAGES_EXPORTED, SYNC_ALL} from './settings.message.types';
+import {IMAGES_EXPORTED, SYNC_ALL, SYNC_SELECTION} from './settings.message.types';
 
 class SyncAllDTO {
   constructor(readonly boardId: string) {}
 }
-export function requestSyncAll(board: Board) {
+
+class SyncSelectionDTO {
+  constructor(readonly boardId: string) {}
+}
+
+function setEventListener(board: Board): void {
   const onMessageEvent = async (event: MessageEvent): Promise<void> => {
     const {pluginMessage} = event.data;
     switch (pluginMessage.type) {
@@ -15,17 +20,40 @@ export function requestSyncAll(board: Board) {
         break;
     }
   };
-  sendMessageToFigma({type: SYNC_ALL, value: new SyncAllDTO(board.id)});
-  window.addEventListener(MESSAGE_EVENT, onMessageEvent);
+  window.addEventListener(MESSAGE_EVENT, onMessageEvent, {once: true});
+}
+
+export function requestSyncAll(board: Board): void {
+  setEventListener(board);
+  sendMessageToFigma({
+    type: SYNC_ALL,
+    value: new SyncAllDTO(board.id)
+  });
+}
+
+export function requestSyncSelection(board: Board): void {
+  setEventListener(board);
+  sendMessageToFigma({
+    type: SYNC_SELECTION,
+    value: new SyncSelectionDTO(board.id)
+  });
 }
 
 export async function processSyncAll(figma: PluginAPI, msg: FigmaMessage<SyncAllDTO>) {
+  if (!msg.value) {
+    return;
+  }
+
   switch (msg.type) {
     case SYNC_ALL:
-      if (!msg.value) break;
-      const allFrames = figma.currentPage.findAll(node => node.type === 'FRAME' || node.type === 'GROUP');
+      const allFrames = figma.currentPage.findAll(node => (node.type === 'FRAME' || node.type === 'GROUP') && node.parent.type === 'PAGE');
       const allImages = await Promise.all(allFrames.map(frame => frame.exportAsync({format: 'PNG'})));
       figma.ui.postMessage({type: IMAGES_EXPORTED, value: JSON.stringify(allImages)});
+      break;
+    case SYNC_SELECTION:
+      const selectedFrames = figma.currentPage.selection;
+      const selectedImages = await Promise.all(selectedFrames.map(frame => frame.exportAsync({format: 'PNG'})));
+      figma.ui.postMessage({type: IMAGES_EXPORTED, value: JSON.stringify(selectedImages)});
       break;
   }
 }
