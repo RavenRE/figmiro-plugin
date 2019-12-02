@@ -3,17 +3,36 @@ import {connect} from 'utils/connect';
 import {ROOT_CONTROLLER_KEY} from 'modules/ROOT_CONTROLLER_KEY';
 import {RootController, InjectedProps} from 'rootController';
 
-@connect(ROOT_CONTROLLER_KEY)
+@connect()
 export class BoardsComponent extends React.Component {
   render(): React.ReactNode {
     const {
-      boardsController: {boards}
+      boardsController: {
+        boards,
+        selectedBoardId,
+        selectBoard,
+        resetSelectedBoard
+      }
     } = this.rootController;
+
     return (
       <div>
-        {boards.map(board =>
-          <div key={board.id}>{board.name}, {board.id}</div>
-        )}
+        <select>
+          <option
+            key="default"
+            value={void 0}
+            selected={!selectedBoardId}
+            onClick={resetSelectedBoard}
+          >Select board</option>
+          {boards.map(board =>
+            <option
+              key={board.id}
+              value={board.id}
+              selected={board.id === selectedBoardId}
+              onClick={() => selectBoard(board.id)}
+            >{board.title}</option>
+          )}
+        </select>
       </div>
     );
   }

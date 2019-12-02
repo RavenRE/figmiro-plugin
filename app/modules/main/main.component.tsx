@@ -5,7 +5,7 @@ import {ROOT_CONTROLLER_KEY} from 'modules/ROOT_CONTROLLER_KEY';
 import {AuthComponent} from 'modules/auth';
 import {SettingsComponent} from 'modules/settings';
 
-@connect(ROOT_CONTROLLER_KEY)
+@connect()
 export class MainComponent extends React.Component {
   render(): React.ReactNode {
     // const {
