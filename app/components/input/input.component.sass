@@ -1,0 +1,20 @@
+.container,
+.input
+  border: 1px solid transparent
+  border-radius: 2px
+
+.container
+  &:hover
+    border-color: $cblack1
+
+  &:focus-within
+    border-color: $cblue
+
+.input
+  padding: 8px
+
+  &::placeholder
+    color: $cblack3
+
+  &:focus
+    border-color: $cblue

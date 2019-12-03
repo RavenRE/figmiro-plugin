@@ -3,6 +3,7 @@ import {connect} from 'helpers/connect';
 import {AuthComponent} from 'modules/auth';
 import {RootController} from 'rootController';
 import {SettingsComponent} from 'modules/settings';
+import styles from './main.component.sass';
 
 @connect()
 export class MainComponent extends React.Component<RootController> {
@@ -10,7 +11,10 @@ export class MainComponent extends React.Component<RootController> {
     const {
       authController: {isAuth}
     } = this.props;
-    console.log(isAuth);
-    return isAuth ? <SettingsComponent/> : <AuthComponent/>;
+    return (
+      <div className={styles.container}>
+        {isAuth ? <SettingsComponent/> : <AuthComponent/>}
+      </div>
+    );
   }
 }
