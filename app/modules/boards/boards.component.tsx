@@ -1,5 +1,5 @@
 import React from 'react';
-import {connect} from 'utils/connect';
+import {connect} from 'helpers/connect';
 import {ROOT_CONTROLLER_KEY} from 'modules/ROOT_CONTROLLER_KEY';
 import {RootController, InjectedProps} from 'rootController';
 

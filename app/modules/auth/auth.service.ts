@@ -1,7 +1,7 @@
 import uuidv1 from 'uuid/v1';
 import uuidv5 from 'uuid/v5';
-import {request} from 'services/request';
-import {sendMessageToFigma, MESSAGE_EVENT, FigmaMessage} from 'services/sendMessageToFigma';
+import {request} from 'helpers/request';
+import {sendMessageToFigma, MESSAGE_EVENT, FigmaMessage} from 'helpers/sendMessageToFigma';
 import {GET_STATE, SET_STATE, STATE_RECEIVED} from './auth.message.types';
 
 const UUID_TOKEN = 'figma2miro';
