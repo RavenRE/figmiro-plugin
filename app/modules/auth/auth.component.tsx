@@ -8,9 +8,11 @@ export class AuthComponent extends React.Component {
       <div>
         <InputComponent
           placeholder="Email"
+          className={styles.input}
         />
         <InputComponent
           placeholder="Password"
+          className={styles.input}
         />
       </div>
     );
