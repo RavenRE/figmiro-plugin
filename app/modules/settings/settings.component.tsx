@@ -4,7 +4,7 @@ import {BoardsComponent} from 'modules/boards';
 import {ROOT_CONTROLLER_KEY} from 'modules/ROOT_CONTROLLER_KEY';
 import {InjectedProps, RootController} from 'rootController';
 
-@connect()
+@connect
 export class SettingsComponent extends React.Component {
   render(): React.ReactNode {
     const {

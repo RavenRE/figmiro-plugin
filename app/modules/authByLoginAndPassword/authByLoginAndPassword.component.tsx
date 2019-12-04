@@ -5,18 +5,20 @@ import {Input} from 'components/input';
 import {Button, ButtonMode} from 'components/button';
 import styles from './authByLoginAndPassword.component.sass';
 
-@connect()
+@connect
 export class AuthByLoginAndPasswordComponent extends React.Component {
   render(): React.ReactNode {
     const {
-      authByLoginAndPasswordController: {
-        changeEmail,
-        changePassword,
-        reset
-      }
-    } = this.props as RootController;
+      changeEmail,
+      changePassword,
+      reset
+    } = this.controller;
     return (
-      <form className={styles.container}>
+      <form
+        className={styles.container}
+        onSubmit={this.onSubmit}
+      >
+        {this.error && <div className={styles.error}>{this.error}</div>}
         <Input
           placeholder="Email"
           onChange={changeEmail}
@@ -45,5 +47,25 @@ export class AuthByLoginAndPasswordComponent extends React.Component {
         </div>
       </form>
     );
+  }
+
+  private onSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    this.controller.login();
+  };
+
+  private get error(): string | undefined {
+    const {errorTypes, error} = this.controller;
+    if (!error) return;
+    const errorMapper = {
+      [errorTypes.EMAIL_EMPTY]: 'Email field is empty',
+      [errorTypes.PASSWORD_EMPTY]: 'Password field is empty',
+      [errorTypes.EMAIL_IS_NOT_CORRECT]: 'Email is not correct'
+    };
+    return errorMapper[error];
+  }
+
+  private get controller() {
+    return (this.props as RootController).authByLoginAndPasswordController;
   }
 }

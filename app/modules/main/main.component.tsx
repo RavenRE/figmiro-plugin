@@ -5,7 +5,7 @@ import {RootController} from 'rootController';
 import {SettingsComponent} from 'modules/settings';
 import styles from './main.component.sass';
 
-@connect()
+@connect
 export class MainComponent extends React.Component {
   render(): React.ReactNode {
     const {

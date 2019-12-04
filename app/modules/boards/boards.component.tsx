@@ -3,7 +3,7 @@ import {connect} from 'helpers/connect';
 import {ROOT_CONTROLLER_KEY} from 'modules/ROOT_CONTROLLER_KEY';
 import {RootController, InjectedProps} from 'rootController';
 
-@connect()
+@connect
 export class BoardsComponent extends React.Component {
   render(): React.ReactNode {
     const {

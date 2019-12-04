@@ -28,7 +28,7 @@
         "no-object-literal-type-assertion": true,
         "no-return-await": true,
         "no-sparse-arrays": true,
-        "member-access": [true, "no-public"],
+        "member-access": false,
         "quotemark": [true, "single", "jsx-double"],
         "no-this-assignment": true,
         "no-unbound-method": true,
