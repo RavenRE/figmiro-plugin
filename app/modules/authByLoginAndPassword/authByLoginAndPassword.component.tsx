@@ -21,11 +21,13 @@ export class AuthByLoginAndPasswordComponent extends React.Component {
         {this.error && <div className={styles.error}>{this.error}</div>}
         <Input
           placeholder="Email"
+          type="email"
           onChange={changeEmail}
           className={styles.input}
         />
         <Input
           placeholder="Password"
+          type="password"
           onChange={changePassword}
           className={styles.input}
         />
@@ -49,18 +51,21 @@ export class AuthByLoginAndPasswordComponent extends React.Component {
     );
   }
 
-  private onSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  private onSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    this.controller.login();
+    await this.controller.login();
   };
 
   private get error(): string | undefined {
     const {errorTypes, error} = this.controller;
     if (!error) return;
     const errorMapper = {
-      [errorTypes.EMAIL_EMPTY]: 'Email field is empty',
-      [errorTypes.PASSWORD_EMPTY]: 'Password field is empty',
-      [errorTypes.EMAIL_IS_NOT_CORRECT]: 'Email is not correct'
+      [errorTypes.EMAIL_EMPTY]: 'Email field is empty.',
+      [errorTypes.PASSWORD_EMPTY]: 'Password field is empty.',
+      [errorTypes.EMAIL_IS_NOT_CORRECT]: 'Email is not correct.',
+      [errorTypes.AUTHORIZATION_FAILED]: 'Authorization Failed. Please, check your email and password.',
+      [errorTypes.SERVER_ERROR]: 'Server error.',
+      [errorTypes.NETWORK_ERROR]: 'Network error. Please, check connection.'
     };
     return errorMapper[error];
   }

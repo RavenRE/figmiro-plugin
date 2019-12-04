@@ -2,11 +2,15 @@ import {observable, action} from 'mobx';
 import {isEmail} from 'utils/isEmail';
 import {AppError} from 'utils/AppError';
 import {AuthByLoginAndPasswordDto} from './authByLoginAndPassword.dto';
+import {authByLoginAndPassword} from './authByLoginAndPassword.service';
 
 enum ErrorType {
   EMAIL_EMPTY = 'EMAIL_EMPTY',
   PASSWORD_EMPTY = 'PASSWORD_EMPTY',
-  EMAIL_IS_NOT_CORRECT = 'EMAIL_IS_NOT_CORRECT'
+  EMAIL_IS_NOT_CORRECT = 'EMAIL_IS_NOT_CORRECT',
+  AUTHORIZATION_FAILED = 'authorizationFailed',
+  SERVER_ERROR = 'Server Error',
+  NETWORK_ERROR = 'NETWORK_ERROR'
 }
 export class AuthByLoginAndPasswordController {
   @observable credentials: AuthByLoginAndPasswordDto = {
@@ -16,11 +20,17 @@ export class AuthByLoginAndPasswordController {
   @observable error?: ErrorType;
   errorTypes = ErrorType;
 
-  @action.bound login(): void {
+  @action.bound async login(): Promise<void> {
     try {
       this.validate();
+      await authByLoginAndPassword(this.credentials);
+      this.resetErrors();
     } catch (error) {
-      this.error = error.status;
+      if (error.status) {
+        this.error = error.status;
+        return;
+      }
+      this.error = ErrorType.NETWORK_ERROR;
     }
   }
 
