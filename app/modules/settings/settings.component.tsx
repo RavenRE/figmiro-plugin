@@ -1,8 +1,8 @@
 import React from 'react';
 import {connect} from 'helpers/connect';
+import {Button} from 'components/button';
+import {RootController} from 'rootController';
 import {BoardsComponent} from 'modules/boards';
-import {ROOT_CONTROLLER_KEY} from 'modules/ROOT_CONTROLLER_KEY';
-import {InjectedProps, RootController} from 'rootController';
 
 @connect
 export class SettingsComponent extends React.Component {
@@ -11,11 +11,17 @@ export class SettingsComponent extends React.Component {
       settingsController: {
         changeSyncType,
         sync
+      },
+      authController: {
+        logout
       }
     } = this.rootController;
     return (
       <div>
         Settings
+        <Button onClick={logout}>
+          Logout
+        </Button>
         <BoardsComponent/>
         <select
           onChange={(event) => {changeSyncType(event.nativeEvent.target.value)}}
@@ -28,7 +34,7 @@ export class SettingsComponent extends React.Component {
     );
   }
 
-  private get rootController(): RootController {
-    return (this.props as InjectedProps)[ROOT_CONTROLLER_KEY];
+  private get rootController() {
+    return this.props as RootController;
   }
 }

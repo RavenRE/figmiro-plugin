@@ -1,19 +1,16 @@
 import React from 'react';
 import {connect} from 'helpers/connect';
-import {ROOT_CONTROLLER_KEY} from 'modules/ROOT_CONTROLLER_KEY';
-import {RootController, InjectedProps} from 'rootController';
+import {RootController} from 'rootController';
 
 @connect
 export class BoardsComponent extends React.Component {
   render(): React.ReactNode {
     const {
-      boardsController: {
-        boards,
-        selectedBoardId,
-        selectBoard,
-        resetSelectedBoard
-      }
-    } = this.rootController;
+      boards,
+      selectedBoardId,
+      selectBoard,
+      resetSelectedBoard
+    } = this.controller;
 
     return (
       <div>
@@ -38,10 +35,10 @@ export class BoardsComponent extends React.Component {
   }
 
   async componentDidMount(): Promise<void> {
-    await this.rootController.boardsController.fetchBoards();
+    await this.controller.fetchBoards();
   }
 
-  private get rootController(): RootController {
-    return (this.props as InjectedProps)[ROOT_CONTROLLER_KEY];
+  private get controller() {
+    return (this.props as RootController).boardsController;
   }
 }

@@ -14,3 +14,7 @@ export function sendMessageToFigma({type, value}: FigmaMessage): void {
     }
   }, '*');
 }
+
+export function sendMessageFromFigma(figma: PluginAPI, message: FigmaMessage): void {
+  figma.ui.postMessage(message);
+}

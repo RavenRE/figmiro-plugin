@@ -1,6 +1,7 @@
 import {observable, action} from 'mobx';
 import {isEmail} from 'utils/isEmail';
 import {AppError} from 'utils/AppError';
+import {RootController} from 'rootController';
 import {AuthByLoginAndPasswordDto} from './authByLoginAndPassword.dto';
 import {authByLoginAndPassword} from './authByLoginAndPassword.service';
 
@@ -20,11 +21,16 @@ export class AuthByLoginAndPasswordController {
   @observable error?: ErrorType;
   errorTypes = ErrorType;
 
+  constructor(
+    private readonly rootController: RootController
+  ) {}
+
   @action.bound async login(): Promise<void> {
     try {
       this.validate();
-      await authByLoginAndPassword(this.credentials);
-      this.resetErrors();
+      const token = await authByLoginAndPassword(this.credentials);
+      this.rootController.authController.setToken(token);
+      this.reset();
     } catch (error) {
       if (error.status) {
         this.error = error.status;
