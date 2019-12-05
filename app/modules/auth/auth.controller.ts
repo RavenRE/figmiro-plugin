@@ -1,11 +1,13 @@
 import {observable, action, computed} from 'mobx';
+import {IController} from 'utils/Controller';
 import {RootController} from 'rootController';
 import {
+  removeTokenInStorage,
   createTokenInStorage,
   getTokenFromStorage
 } from './auth.service';
 
-export class AuthController {
+export class AuthController implements IController {
   @observable token?: string;
 
   constructor(
@@ -21,9 +23,12 @@ export class AuthController {
     this.token = token;
   }
 
-  @action.bound async logout(): Promise<void> {
-    this.reset();
-    this.rootController.authByLoginAndPasswordController.reset();
+  @action.bound logout(): void {
+    removeTokenInStorage();
+    Object.values(this.rootController)
+      .forEach(controller => {
+        controller.reset();
+      });
   }
 
   @action.bound reset(): void {

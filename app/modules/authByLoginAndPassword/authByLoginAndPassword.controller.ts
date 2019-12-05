@@ -1,4 +1,5 @@
 import {observable, action} from 'mobx';
+import {IController} from 'utils/Controller';
 import {isEmail} from 'utils/isEmail';
 import {AppError} from 'utils/AppError';
 import {RootController} from 'rootController';
@@ -13,7 +14,7 @@ enum ErrorType {
   SERVER_ERROR = 'Server Error',
   NETWORK_ERROR = 'NETWORK_ERROR'
 }
-export class AuthByLoginAndPasswordController {
+export class AuthByLoginAndPasswordController implements IController {
   @observable credentials: AuthByLoginAndPasswordDto = {
     email: '',
     password: ''

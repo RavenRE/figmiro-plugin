@@ -1,8 +1,9 @@
 import {observable, action, computed} from 'mobx';
+import {IController} from 'utils/Controller';
 import {Boards, Board} from './boards.entity';
 import {getAllBoards} from './boards.service';
 
-export class BoardsController {
+export class BoardsController implements IController {
   @observable boards: Boards = [];
   @observable selectedBoard?: Board;
   @observable fetching = false;
@@ -31,5 +32,12 @@ export class BoardsController {
 
   @computed get selectedBoardId(): string | void {
     return (this.selectedBoard || {}).id;
+  }
+
+  @action.bound reset(): void {
+    this.boards = [];
+    this.selectedBoard = undefined;
+    this.fetching = false;
+    this.error = '';
   }
 }

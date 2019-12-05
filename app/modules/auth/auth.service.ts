@@ -9,7 +9,11 @@ const SET_TOKEN_IN_STORAGE = 'SET_TOKEN_IN_STORAGE';
 const GET_TOKEN_FROM_STORAGE = 'GET_TOKEN_FROM_STORAGE';
 const TOKEN_RECEIVED_FROM_STORAGE = 'TOKEN_RECEIVED_FROM_STORAGE';
 
-export function createTokenInStorage(token: string): void {
+export function removeTokenInStorage(): void {
+  createTokenInStorage();
+}
+
+export function createTokenInStorage(token?: string): void {
   sendMessageToFigma({type: SET_TOKEN_IN_STORAGE, value: token});
 }
 

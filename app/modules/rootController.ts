@@ -1,9 +1,11 @@
+import {IController} from 'utils/Controller';
 import {AuthController} from 'modules/auth';
+import {AuthByLoginAndPasswordController} from 'modules/authByLoginAndPassword';
 import {BoardsController} from 'modules/boards';
 import {SettingsController} from 'modules/settings';
-import {AuthByLoginAndPasswordController} from 'modules/authByLoginAndPassword/authByLoginAndPassword.controller';
 
 export class RootController {
+  [key: string]: IController;
   authController: AuthController;
   authByLoginAndPasswordController: AuthByLoginAndPasswordController;
   boardsController: BoardsController;
