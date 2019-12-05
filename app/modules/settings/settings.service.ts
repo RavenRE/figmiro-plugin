@@ -1,5 +1,5 @@
-import {request} from 'services/request';
-import {FigmaMessage, MESSAGE_EVENT, sendMessageToFigma} from 'services/sendMessageToFigma';
+import {request} from 'helpers/request';
+import {FigmaMessage, MESSAGE_EVENT, sendMessageToFigma} from 'helpers/figmaMessaging';
 import {Board} from 'modules/boards';
 import {IMAGES_EXPORTED, SYNC_ALL, SYNC_SELECTION} from './settings.message.types';
 

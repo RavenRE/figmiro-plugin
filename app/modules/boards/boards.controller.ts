@@ -1,20 +1,15 @@
 import {observable, action, computed} from 'mobx';
+import {IController} from 'utils/Controller';
 import {Boards, Board} from './boards.entity';
 import {getAllBoards} from './boards.service';
-import {RootController} from 'rootController';
 
-export class BoardsController {
+export class BoardsController implements IController {
   @observable boards: Boards = [];
   @observable selectedBoard?: Board;
   @observable fetching = false;
   @observable error = '';
 
-  constructor(private readonly rootController: RootController) {}
-
   @action.bound async fetchBoards(): Promise<void> {
-    const {
-      authController: {stateValue}
-    } = this.rootController;
     try {
       this.fetching = true;
       this.boards = await getAllBoards();
@@ -37,5 +32,12 @@ export class BoardsController {
 
   @computed get selectedBoardId(): string | void {
     return (this.selectedBoard || {}).id;
+  }
+
+  @action.bound reset(): void {
+    this.boards = [];
+    this.selectedBoard = undefined;
+    this.fetching = false;
+    this.error = '';
   }
 }

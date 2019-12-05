@@ -23,7 +23,7 @@
     "paths": {
       "components/*": ["components/*"],
       "utils/*": ["utils/*"],
-      "services/*": ["services/*"],
+      "helpers/*": ["helpers/*"],
       "transport/*": ["transport/*"],
       "pages/*": ["pages/*"],
       "modules/*": ["modules/*"],

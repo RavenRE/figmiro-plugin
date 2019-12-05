@@ -1,4 +1,4 @@
-import {request} from 'services/request';
+import {request} from 'helpers/request';
 import {Boards} from './boards.entity';
 
 export async function getAllBoards(): Promise<Boards> {

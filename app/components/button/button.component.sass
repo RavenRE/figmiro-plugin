@@ -1,0 +1,41 @@
+.container,
+.btn
+  border: 1px solid transparent
+  border-radius: 6px
+
+.btn
+  padding: 7px 16px
+
+  &:disabled
+    pointer-events: none
+
+.primary
+  &:focus-within
+    border-color: $cblueblack
+
+  .btn
+    background-color: $cblue
+    color: $cwhite
+
+    &:focus
+      border-color: $cblueblack
+
+    &:disabled
+      background-color: $cblack3
+
+.secondary
+  &:focus-within
+    border-color: $cblue
+
+  .btn
+    border-color: $cblack
+    background-color: $cwhite
+    color: $cblack
+
+    &:focus
+      border-color: $cblue
+
+    &:disabled
+      color: $cblack3
+      border-color: $cblack3
+      background-color: transparent

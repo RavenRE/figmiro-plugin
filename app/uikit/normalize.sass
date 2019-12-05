@@ -1,9 +1,12 @@
+@import url('https://rsms.me/inter/inter.css')
+
 *
   margin: 0
   padding: 0
   font-weight: 400
   box-sizing: border-box
   user-select: none
+  +r-11-16-i
 
 html,
 body
@@ -14,6 +17,12 @@ body
   -moz-osx-font-smoothing: grayscale
   -webkit-text-size-adjust: 100%
   -webkit-overflow-scrolling: touch
+
+html
+  font-family: 'Inter', sans-serif
+
+  @supports (font-variation-settings: normal)
+    font-family: 'Inter var', sans-serif
 
 ul,
 ol
