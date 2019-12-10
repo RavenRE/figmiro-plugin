@@ -1,36 +1,21 @@
 import React from 'react';
 import {connect} from 'helpers/connect';
 import {RootController} from 'rootController';
+import {Boards} from 'modules/boards';
+import {DDItems, Dropdown} from 'components/dropdown';
 
 @connect
 export class BoardsComponent extends React.Component {
   render(): React.ReactNode {
     const {
       boards,
-      selectedBoardId,
-      selectBoard,
-      resetSelectedBoard
+      selectBoard
     } = this.controller;
-
     return (
-      <div>
-        <select>
-          <option
-            key="default"
-            value={void 0}
-            selected={!selectedBoardId}
-            onClick={resetSelectedBoard}
-          >Select board</option>
-          {boards.map(board =>
-            <option
-              key={board.id}
-              value={board.id}
-              selected={board.id === selectedBoardId}
-              onClick={() => selectBoard(board.id)}
-            >{board.title}</option>
-          )}
-        </select>
-      </div>
+      <Dropdown
+        items={mapBoardsToDDItems(boards)}
+        onItemClick={selectBoard}
+      />
     );
   }
 
@@ -41,4 +26,12 @@ export class BoardsComponent extends React.Component {
   private get controller() {
     return (this.props as RootController).boardsController;
   }
+}
+
+function mapBoardsToDDItems(boards: Boards): DDItems {
+  return boards
+    .map(board => ({
+      id: board.id,
+      value: board.title
+    }));
 }
