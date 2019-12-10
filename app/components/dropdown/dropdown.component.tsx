@@ -1,6 +1,7 @@
 import React from 'react';
 import cn from 'classnames';
 import {WithClassName} from 'utils/WithClassName';
+import {Icon} from 'components/icon';
 import {DDItem, OnDDItemClick, DropdownItem} from './dropdown-item';
 import styles from './dropdown.component.sass';
 
@@ -13,30 +14,40 @@ type Props = {
   onItemClick: OnDDItemClick;
 } & WithClassName;
 
-export class Dropdown extends React.Component<Props> {
+type State = {
+  isOpen: boolean
+};
+
+export class Dropdown extends React.Component<Props, State> {
+  state = {
+    isOpen: false
+  };
+  wrapperRef?: HTMLElement;
+
   render(): React.ReactNode {
     const {items, selected, className, onItemClick} = this.props;
-
-    if (this.isZeroItems) {
-      return (
-        <div>
-          Zero
-        </div>
-      );
-    }
-
-    if (this.isOneItem) {
-      return (
-        <div>
-          {items[0].value}
-        </div>
-      );
-    }
-
     return (
-      <div className={cn(className)}>
-        <div className={styles.selected}>
-          {selected.value}
+      <div
+        className={
+          cn(
+            className,
+            styles.container,
+            {[styles['is-open']]: this.state.isOpen}
+          )
+        }
+        ref={this.setWrapperRef}
+      >
+        <div
+          onClick={this.toggle}
+          className={styles.selected}
+        >
+          <div>
+            {selected.value}
+          </div>
+          <Icon
+            className={styles['selected-arrow']}
+            name="arrow"
+          />
         </div>
         <div className={styles.items}>
         {items.map(item =>
@@ -44,6 +55,8 @@ export class Dropdown extends React.Component<Props> {
             key={item.id}
             item={item}
             onClick={onItemClick}
+            className={styles.item}
+            active={selected.id === item.id}
           />
         )}
         </div>
@@ -51,11 +64,41 @@ export class Dropdown extends React.Component<Props> {
     );
   }
 
-  private get isOneItem(): boolean {
-    return this.props.items.length === 1;
+  componentDidMount() {
+    document.addEventListener('mousedown', this.handleClickOutside);
   }
 
-  private get isZeroItems(): boolean {
-    return !this.props.items.length;
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.handleClickOutside);
   }
+
+  private setWrapperRef = (node: HTMLDivElement) => {
+    this.wrapperRef = node;
+  };
+
+  private handleClickOutside = (event: MouseEvent): void => {
+    if (
+      this.wrapperRef &&
+      !this.wrapperRef.contains(event.target as Node) &&
+      this.state.isOpen
+    ) {
+      this.close();
+    }
+  };
+
+  private toggle = (): void => {
+    if (this.state.isOpen) {
+      this.close();
+    } else {
+      this.open();
+    }
+  };
+
+  private open = (): void => {
+    this.setState({isOpen: true});
+  };
+
+  private close = (): void => {
+    this.setState({isOpen: false});
+  };
 }

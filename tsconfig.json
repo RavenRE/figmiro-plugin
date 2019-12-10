@@ -27,7 +27,8 @@
       "transport/*": ["transport/*"],
       "pages/*": ["pages/*"],
       "modules/*": ["modules/*"],
-      "rootController": ["modules/rootController.ts"]
+      "rootController": ["modules/rootController.ts"],
+      "config": ["config.ts"]
     }
   }
 }

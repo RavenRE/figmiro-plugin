@@ -1,6 +1,7 @@
 import React from 'react';
 import cn from 'classnames';
 import {WithClassName} from 'utils/WithClassName';
+import styles from './dropdown-item.component.sass';
 
 export type DDItem = {
   id: string;
@@ -11,18 +12,26 @@ export type OnDDItemClick = (id: string) => void;
 
 type Props = {
   item: DDItem;
+  active: boolean;
   onClick: OnDDItemClick;
 } & WithClassName;
 
 export class DropdownItem extends React.Component<Props> {
   render(): React.ReactNode {
     const {
+      active,
       item: {value},
       className
     } = this.props;
     return (
       <div
-        className={cn(className)}
+        className={
+          cn(
+            className,
+            styles.container,
+            {[styles['is-active']]: active}
+          )
+        }
         onClick={this.onClick}
       >
         {value}

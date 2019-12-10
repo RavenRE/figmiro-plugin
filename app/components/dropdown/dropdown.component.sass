@@ -1,0 +1,43 @@
+.container
+  position: relative
+
+
+.selected,
+.items
+  background-color: $cwhite
+  border: 1px solid $cblack1
+  border-radius: 2px
+
+  &:focus
+    border-color: $cblue
+
+.selected,
+.item
+  padding: 8px
+
+.selected
+  display: flex
+  justify-content: space-between
+  align-items: center
+  cursor: pointer
+
+.selected-arrow
+  width: 10px
+  height: 6px
+
+.items
+  display: none
+  overflow-y: scroll
+  max-height: 162px
+  margin-top: -1px
+  position: absolute
+  top: 100%
+  left: 0
+  right: 0
+
+.is-open
+  .items
+    display: block
+
+  .selected-arrow
+    transform: rotate(180deg)
