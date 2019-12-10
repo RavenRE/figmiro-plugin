@@ -20,7 +20,8 @@ export const Button: React.FC<Props> = ({
   mode,
   ...props
 }): React.ReactElement =>
-  <div
+  <button
+    {...props}
     className={
       cn(
         styles.container,
@@ -29,10 +30,5 @@ export const Button: React.FC<Props> = ({
       )
     }
   >
-    <button
-      {...props}
-      className={styles.btn}
-    >
-      {children}
-    </button>
-  </div>;
+    {children}
+  </button>;
