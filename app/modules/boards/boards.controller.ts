@@ -24,9 +24,13 @@ export class BoardsController implements IController {
     this.selectedBoard = this.boards.find((board: Board) => board.id === id);
   }
 
-  @action.bound reset(): void {
-    this.boards = [];
+  @action.bound resetSelected(): void {
     this.selectedBoard = undefined;
+  }
+
+  @action.bound reset(): void {
+    this.resetSelected();
+    this.boards = [];
     this.fetching = false;
     this.error = '';
   }

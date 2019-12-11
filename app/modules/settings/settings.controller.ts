@@ -35,5 +35,14 @@ export class SettingsController implements IController {
     return this.rootController.boardsController.selectedBoard;
   }
 
-  reset() {}
+  reset = (): void => {
+    const {
+      boardsController,
+      settingsAdditionsController,
+      settingsSelectionController
+    } = this.rootController;
+    boardsController.resetSelected();
+    settingsAdditionsController.reset();
+    settingsSelectionController.reset();
+  };
 }

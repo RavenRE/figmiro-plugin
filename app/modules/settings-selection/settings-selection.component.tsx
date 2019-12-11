@@ -3,9 +3,10 @@ import {connect} from 'helpers/connect';
 import {RootController} from 'rootController';
 import {RadioArea, RadioBtn, RadioItems, OnRadioClick} from 'components/radio-area';
 import {SettingsSelectionType} from './settings-selection.entity';
+import {WithClassName} from 'utils/WithClassName';
 
 @connect
-export class SettingsSelectionComponent extends React.Component {
+export class SettingsSelectionComponent extends React.Component<WithClassName> {
   render(): React.ReactNode {
     const {
       settingsSelectionController: {
@@ -16,6 +17,7 @@ export class SettingsSelectionComponent extends React.Component {
     } = this.rootController;
     return (
       <RadioArea
+        className={this.props.className}
         items={mapSyncOptionsToRadio(selectionTypes)}
         selected={mapSyncOptionToRadio(selectionType)}
         onItemClick={mapChangeFunc(changeSelectionType)}

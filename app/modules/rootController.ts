@@ -4,6 +4,7 @@ import {AuthByLoginAndPasswordController} from 'modules/authByLoginAndPassword';
 import {BoardsController} from 'modules/boards';
 import {SettingsController} from 'modules/settings';
 import {SettingsSelectionController} from 'modules/settings-selection';
+import {SettingsAdditionsController} from 'modules/settings-additions';
 
 export class RootController {
   [key: string]: IController;
@@ -11,6 +12,7 @@ export class RootController {
   authByLoginAndPasswordController: AuthByLoginAndPasswordController;
   boardsController: BoardsController;
   settingsController: SettingsController;
+  settingsAdditionsController: SettingsAdditionsController;
   settingsSelectionController: SettingsSelectionController;
 
   constructor() {
@@ -20,6 +22,7 @@ export class RootController {
     this.boardsController = new BoardsController();
 
     this.settingsController = new SettingsController(this);
+    this.settingsAdditionsController = new SettingsAdditionsController();
     this.settingsSelectionController = new SettingsSelectionController();
   }
 }
