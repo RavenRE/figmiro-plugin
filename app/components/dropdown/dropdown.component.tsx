@@ -25,7 +25,7 @@ export class Dropdown extends React.Component<Props, State> {
   wrapperRef?: HTMLElement;
 
   render(): React.ReactNode {
-    const {items, selected, className, onItemClick} = this.props;
+    const {items, selected, className} = this.props;
     return (
       <div
         className={
@@ -54,7 +54,7 @@ export class Dropdown extends React.Component<Props, State> {
           <DropdownItem
             key={item.id}
             item={item}
-            onClick={onItemClick}
+            onClick={this.onItemClick}
             className={styles.item}
             active={selected.id === item.id}
           />
@@ -72,7 +72,12 @@ export class Dropdown extends React.Component<Props, State> {
     document.removeEventListener('mousedown', this.handleClickOutside);
   }
 
-  private setWrapperRef = (node: HTMLDivElement) => {
+  private onItemClick = (id: string): void => {
+    this.props.onItemClick(id);
+    this.close();
+  };
+
+  private setWrapperRef = (node: HTMLDivElement): void => {
     this.wrapperRef = node;
   };
 

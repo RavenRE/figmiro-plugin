@@ -1,33 +1,23 @@
-import {action, observable} from 'mobx';
+import {action} from 'mobx';
 import {RootController} from 'rootController';
 import {Board} from 'modules/boards';
 import {IController} from 'utils/Controller';
 import {requestSyncAll, requestSyncSelection} from './settings.service';
 
-enum SyncType {
-  ALL = 'all',
-  SELECTION = 'selection'
-}
-
 export class SettingsController implements IController {
-  @observable itemsToSync: SyncType = SyncType.ALL;
 
   constructor(private readonly rootController: RootController) {}
 
-  @action.bound sync(): void {
-    switch (this.itemsToSync) {
-      case SyncType.ALL:
-        this.syncAll();
-        break;
-      case SyncType.SELECTION:
-        this.syncSelection();
-        break;
-    }
-  }
-
-  @action.bound changeSyncType(type: SyncType): void {
-    this.itemsToSync = type;
-  }
+  // @action.bound sync(): void {
+  //   switch (this.itemsToSync) {
+  //     case SyncType.ALL:
+  //       this.syncAll();
+  //       break;
+  //     case SyncType.SELECTION:
+  //       this.syncSelection();
+  //       break;
+  //   }
+  // }
 
   @action.bound syncAll(): void {
     if (this.selectedBoard) {
@@ -45,7 +35,5 @@ export class SettingsController implements IController {
     return this.rootController.boardsController.selectedBoard;
   }
 
-  @action.bound reset(): void {
-    this.itemsToSync = SyncType.ALL;
-  }
+  reset() {}
 }

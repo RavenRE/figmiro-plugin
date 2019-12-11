@@ -1,39 +1,40 @@
 import React from 'react';
 import cn from 'classnames';
 import {WithClassName} from 'utils/WithClassName';
-import styles from './dropdown-item.component.sass';
+import styles from './radio.component.sass';
 
-export type DDItem = {
+export type RadioBtn = {
   id: string;
   value: string;
 };
 
-export type OnDDItemClick = (id: string) => void;
+export type OnRadioClick = (id: string) => void;
 
 type Props = {
-  item: DDItem;
+  radio: RadioBtn;
   active: boolean;
-  onClick: OnDDItemClick;
+  onClick: OnRadioClick;
 } & WithClassName;
 
-export class DropdownItem extends React.Component<Props> {
+export class Radio extends React.Component<Props> {
   render(): React.ReactNode {
     const {
-      item: {value}
+      radio: {value}
     } = this.props;
     return (
       <div
         className={this.className}
         onClick={this.onClick}
       >
-        {value}
+        <div className={styles.icon}/>
+        <div>{value}</div>
       </div>
     );
   }
 
   private onClick = (): void => {
     const {
-      item: {id},
+      radio: {id},
       onClick
     } = this.props;
     onClick(id);
@@ -42,8 +43,8 @@ export class DropdownItem extends React.Component<Props> {
   private get className(): string {
     const {className, active} = this.props;
     return cn(
-      className,
       styles.container,
+      className,
       {[styles['is-active']]: active}
     );
   }
