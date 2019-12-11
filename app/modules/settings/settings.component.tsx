@@ -6,18 +6,30 @@ import {SettingsSelectionComponent} from 'modules/settings-selection';
 import {SettingsAdditionsComponent} from 'modules/settings-additions';
 import {Button, ButtonMode} from 'components/button';
 import styles from './settings.component.sass';
+import {Icon} from 'components/icon';
 
 @connect
 export class SettingsComponent extends React.Component {
   render(): React.ReactNode {
     const {
+      authController: {logout},
       settingsController: {
         reset
       }
     } = this.rootController;
     return (
       <div>
-        Settings
+        <div className={styles.intro}>
+          <div className={styles.title}>
+            Settings
+          </div>
+          <div
+            className={styles['logout-icon']}
+            onClick={logout}
+          >
+            <Icon name="logout"/>
+          </div>
+        </div>
         <BoardsComponent/>
         <div className={styles.wrap}>
           <SettingsSelectionComponent className={styles['settings-item']}/>
