@@ -21,10 +21,6 @@ export class BoardsComponent extends React.Component {
     );
   }
 
-  async componentDidMount(): Promise<void> {
-    await this.controller.fetchBoards();
-  }
-
   private get controller() {
     return (this.props as RootController).boardsController;
   }

@@ -1,7 +1,7 @@
 import React from 'react';
 import cn from 'classnames';
 import {WithClassName} from 'utils/WithClassName';
-import {Icon} from 'components/icon';
+import {Icon, IconName} from 'modules/icons';
 import {DDItem, OnDDItemClick, DropdownItem} from './dropdown-item';
 import styles from './dropdown.component.sass';
 
@@ -46,7 +46,7 @@ export class Dropdown extends React.Component<Props, State> {
           </div>
           <Icon
             className={styles['selected-arrow']}
-            name="arrow"
+            name={IconName.ARROW}
           />
         </div>
         <div className={styles.items}>

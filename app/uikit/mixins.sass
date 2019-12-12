@@ -1,3 +1,11 @@
+@mixin size($w, $h: false)
+  @if $h
+    width: $w
+    height: $h
+  @else
+    width: $w
+    height: $w
+
 @mixin r-11-16-i
   font-weight: normal
   font-size: 11px

@@ -1,4 +1,5 @@
 import {IController} from 'utils/Controller';
+import {IconsController} from 'modules/icons';
 import {AuthController} from 'modules/auth';
 import {AuthByLoginAndPasswordController} from 'modules/authByLoginAndPassword';
 import {BoardsController} from 'modules/boards';
@@ -8,6 +9,8 @@ import {SettingsAdditionsController} from 'modules/settings-additions';
 
 export class RootController {
   [key: string]: IController;
+
+  iconsController: IconsController;
   authController: AuthController;
   authByLoginAndPasswordController: AuthByLoginAndPasswordController;
   boardsController: BoardsController;
@@ -16,6 +19,8 @@ export class RootController {
   settingsSelectionController: SettingsSelectionController;
 
   constructor() {
+    this.iconsController = new IconsController();
+
     this.authController = new AuthController(this);
     this.authByLoginAndPasswordController = new AuthByLoginAndPasswordController(this);
 

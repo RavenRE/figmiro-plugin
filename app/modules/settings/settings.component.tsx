@@ -5,8 +5,9 @@ import {BoardsComponent} from 'modules/boards';
 import {SettingsSelectionComponent} from 'modules/settings-selection';
 import {SettingsAdditionsComponent} from 'modules/settings-additions';
 import {Button, ButtonMode} from 'components/button';
+import {Icon, IconName} from 'modules/icons';
+import {Loader} from 'components/loader';
 import styles from './settings.component.sass';
-import {Icon} from 'components/icon';
 
 @connect
 export class SettingsComponent extends React.Component {
@@ -15,8 +16,10 @@ export class SettingsComponent extends React.Component {
       authController: {logout},
       settingsController: {
         reset
-      }
+      },
+      boardsController: {fetching}
     } = this.rootController;
+    if (fetching) return <Loader className={styles.loader}/>;
     return (
       <div>
         <div className={styles.intro}>
@@ -27,7 +30,7 @@ export class SettingsComponent extends React.Component {
             className={styles['logout-icon']}
             onClick={logout}
           >
-            <Icon name="logout"/>
+            <Icon name={IconName.LOGOUT}/>
           </div>
         </div>
         <BoardsComponent/>
@@ -51,6 +54,12 @@ export class SettingsComponent extends React.Component {
         </div>
       </div>
     );
+  }
+
+  componentDidMount() {
+    Promise.all([
+      this.rootController.boardsController.fetchBoards()
+    ]);
   }
 
   private get rootController(): RootController {
