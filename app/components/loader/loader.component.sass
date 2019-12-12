@@ -1,7 +1,4 @@
-$thin: 2px
-
-@mixin color($color)
-  border-color: $color transparent transparent transparent
+$thin: 1.5px
 
 .container
   position: relative
@@ -15,10 +12,9 @@ $thin: 2px
   position: absolute
   +size(100%)
   margin: $thin
-  border: $thin solid
+  border: $thin solid transparent
   border-radius: 50%
   animation: container 1.2s cubic-bezier(.5, 0, .5, 1) infinite
-  +color($cblack)
 
 .container div:nth-child(1)
   animation-delay: -.45s
@@ -35,3 +31,9 @@ $thin: 2px
 
   100%
     transform: rotate(360deg)
+
+.primary div
+  border-top-color: $cblack
+
+.secondary div
+  border-top-color: $cwhite

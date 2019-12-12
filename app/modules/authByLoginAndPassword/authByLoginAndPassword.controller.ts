@@ -19,6 +19,7 @@ export class AuthByLoginAndPasswordController implements IController {
     email: '',
     password: ''
   };
+  @observable fetching = false;
   @observable error?: ErrorType;
   errorTypes = ErrorType;
 
@@ -28,7 +29,9 @@ export class AuthByLoginAndPasswordController implements IController {
 
   @action.bound async login(): Promise<void> {
     try {
+      if (this.fetching) return;
       this.validate();
+      this.fetching = true;
       const token = await authByLoginAndPassword(this.credentials);
       this.rootController.authController.setToken(token);
       this.reset();
@@ -38,6 +41,8 @@ export class AuthByLoginAndPasswordController implements IController {
         return;
       }
       this.error = ErrorType.NETWORK_ERROR;
+    } finally {
+      this.fetching = false;
     }
   }
 
@@ -70,5 +75,6 @@ export class AuthByLoginAndPasswordController implements IController {
 
   @action.bound private resetErrors(): void {
     this.error = undefined;
+    this.fetching = false;
   }
 }

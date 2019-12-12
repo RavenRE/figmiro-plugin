@@ -19,7 +19,7 @@ export class SettingsComponent extends React.Component {
       },
       boardsController: {fetching}
     } = this.rootController;
-    if (fetching) return <Loader className={styles.loader}/>;
+    if (fetching) return <Loader/>;
     return (
       <div>
         <div className={styles.intro}>

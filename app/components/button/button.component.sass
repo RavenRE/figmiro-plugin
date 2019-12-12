@@ -1,10 +1,20 @@
 .container
+  position: relative
   padding: 7px 16px
   border: 1px solid transparent
   border-radius: 6px
 
   &:disabled
     pointer-events: none
+
+.loader
+  display: none
+  position: absolute
+  margin: -.2em auto 0 -.3em
+  top: 50%
+  left: 50%
+  transform: translate(-50%, -50%)
+  font-size: 8px
 
 .primary
   background-color: $cblue
@@ -28,3 +38,10 @@
     color: $cblack3
     border-color: $cblack3
     background-color: transparent
+
+.is-fetching
+  .loader
+    display: block
+
+  .children
+    visibility: hidden

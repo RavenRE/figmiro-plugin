@@ -9,6 +9,7 @@ import styles from './authByLoginAndPassword.component.sass';
 export class AuthByLoginAndPasswordComponent extends React.Component {
   render(): React.ReactNode {
     const {
+      fetching,
       changeEmail,
       changePassword,
       reset
@@ -43,6 +44,7 @@ export class AuthByLoginAndPasswordComponent extends React.Component {
             type="submit"
             className={styles.btn}
             mode={ButtonMode.PRIMARY}
+            fetching={fetching}
           >
             Sign In
           </Button>

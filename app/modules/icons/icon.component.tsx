@@ -26,6 +26,6 @@ export class Icon extends React.Component<Props> {
   }
 
   private get rootController(): RootController {
-    return (this.props as RootController);
+    return this.props as RootController;
   }
 }
