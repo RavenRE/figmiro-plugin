@@ -15,9 +15,13 @@ export class SettingsComponent extends React.Component {
     const {
       authController: {logout},
       settingsController: {
+        sync,
         reset
       },
-      boardsController: {fetching}
+      boardsController: {
+        fetching,
+        selectedBoard
+      }
     } = this.rootController;
     if (fetching) return <Loader/>;
     return (
@@ -48,6 +52,8 @@ export class SettingsComponent extends React.Component {
           <Button
             className={styles.btn}
             mode={ButtonMode.PRIMARY}
+            disabled={!selectedBoard}
+            onClick={sync}
           >
             Sync
           </Button>

@@ -27,7 +27,7 @@ export class RootController {
     this.boardsController = new BoardsController();
 
     this.settingsController = new SettingsController(this);
-    this.settingsAdditionsController = new SettingsAdditionsController();
+    this.settingsAdditionsController = new SettingsAdditionsController(this);
     this.settingsSelectionController = new SettingsSelectionController();
   }
 }
