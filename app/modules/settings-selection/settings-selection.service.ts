@@ -1,66 +1,89 @@
+import {AppError} from 'utils/AppError';
 import {request} from 'helpers/request';
 import {FigmaMessage, MESSAGE_EVENT, sendMessageToFigma} from 'helpers/figmaMessaging';
-import {Board} from 'modules/boards';
 import {SettingsSelectionType} from './settings-selection.entity';
-import {SyncSelectionDTO} from './settings-selection.dto';
-import {IMAGES_EXPORTED, SYNC_ALL, SYNC_SELECTION} from './settings-selection.message.types';
+import {
+  ProcessSyncArtboardsDTO,
+  CreateImagesInMiroDTO,
+  SyncArtboardsDTO
+} from './settings-selection.dto';
 
 export function getSelectionTypes(): SettingsSelectionType[] {
   return Object.values(SettingsSelectionType);
 }
 
-function setEventListener(board: Board): void {
-  const onMessageEvent = async (event: MessageEvent): Promise<void> => {
-    const {pluginMessage} = event.data;
-    switch (pluginMessage.type) {
-      case IMAGES_EXPORTED:
-        await createImagesInMiro(board.id, pluginMessage.value);
-        break;
+export async function syncArtboards(
+  dto: SyncArtboardsDTO
+): Promise<void> {
+  try {
+    const images = await getImages(dto);
+    // await createImagesInMiro({
+    //   boardId: dto.board.id,
+    //   images
+    // });
+  } catch (error) {
+    throw error;
+  }
+}
+
+const IMAGES_EXPORTED = 'IMAGES_EXPORTED';
+export async function processSyncArtboards(
+  figma: PluginAPI,
+  msg: FigmaMessage<ProcessSyncArtboardsDTO>
+): Promise<void> {
+  if (
+    !msg.value || (
+      msg.type !== SettingsSelectionType.ALL &&
+      msg.type !== SettingsSelectionType.SELECTED
+    )
+  ) return;
+
+  let frames;
+
+  if (msg.type === SettingsSelectionType.ALL) {
+    frames = figma.currentPage.findAll(
+      node =>
+        (node.type === 'FRAME' || node.type === 'GROUP') &&
+        !!node.parent &&
+        node.parent.type === 'PAGE'
+    );
+  } else if (msg.type === SettingsSelectionType.SELECTED) {
+    frames = figma.currentPage.selection;
+  }
+
+  if (!frames) return;
+
+  const images = await Promise.all(frames.map(frame => frame.exportAsync({format: 'PNG'})));
+  figma.ui.postMessage({type: IMAGES_EXPORTED, value: JSON.stringify(images)});
+}
+
+async function getImages(dto: SyncArtboardsDTO): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const onMessageEvent = (event: MessageEvent) => {
+      const {pluginMessage} = event.data;
+      switch (pluginMessage.type) {
+        case IMAGES_EXPORTED:
+          resolve(pluginMessage.value);
+          window.removeEventListener(MESSAGE_EVENT, onMessageEvent);
+      }
+    };
+    try {
+      sendMessageToFigma({
+        type: dto.selectionType,
+        value: new ProcessSyncArtboardsDTO(dto.board.id)
+      });
+      window.addEventListener(MESSAGE_EVENT, onMessageEvent);
+    } catch (error) {
+      reject(error);
+      window.removeEventListener(MESSAGE_EVENT, onMessageEvent);
     }
-  };
-  window.addEventListener(MESSAGE_EVENT, onMessageEvent, {once: true});
-}
-
-export function requestSyncAll(board: Board): void {
-  setEventListener(board);
-  sendMessageToFigma({
-    type: SYNC_ALL,
-    value: new SyncSelectionDTO(board.id)
   });
 }
 
-export function requestSyncSelection(board: Board): void {
-  setEventListener(board);
-  sendMessageToFigma({
-    type: SYNC_SELECTION,
-    value: new SyncSelectionDTO(board.id)
-  });
-}
-
-export async function processSyncArtboards(figma: PluginAPI, msg: FigmaMessage<SyncSelectionDTO>) {
-  if (!msg.value) {
-    return;
+async function createImagesInMiro(dto: CreateImagesInMiroDTO): Promise<void> {
+  try {
+    await request.post('/pictures', dto);
+  } catch (error) {
+    throw new AppError(error.response.data.reason);
   }
-
-  switch (msg.type) {
-    case SYNC_ALL:
-      const allFrames = figma.currentPage.findAll(
-        node =>
-          (node.type === 'FRAME' || node.type === 'GROUP') &&
-          !!node.parent &&
-          node.parent.type === 'PAGE'
-      );
-      const allImages = await Promise.all(allFrames.map(frame => frame.exportAsync({format: 'PNG'})));
-      figma.ui.postMessage({type: IMAGES_EXPORTED, value: JSON.stringify(allImages)});
-      break;
-    case SYNC_SELECTION:
-      const selectedFrames = figma.currentPage.selection;
-      const selectedImages = await Promise.all(selectedFrames.map(frame => frame.exportAsync({format: 'PNG'})));
-      figma.ui.postMessage({type: IMAGES_EXPORTED, value: JSON.stringify(selectedImages)});
-      break;
-  }
-}
-
-export async function createImagesInMiro(boardId: string, images: string): Promise<void> {
-  await request.post('/pictures', {boardId, images});
 }

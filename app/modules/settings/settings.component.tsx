@@ -16,14 +16,15 @@ export class SettingsComponent extends React.Component {
       authController: {logout},
       settingsController: {
         sync,
-        reset
+        reset,
+        fetching: syncFetching
       },
       boardsController: {
-        fetching,
+        fetching: boardsFetching,
         selectedBoard
       }
     } = this.rootController;
-    if (fetching) return <Loader/>;
+    if (boardsFetching) return <Loader/>;
     return (
       <div>
         <div className={styles.intro}>
@@ -54,6 +55,7 @@ export class SettingsComponent extends React.Component {
             mode={ButtonMode.PRIMARY}
             disabled={!selectedBoard}
             onClick={sync}
+            fetching={syncFetching}
           >
             Sync
           </Button>

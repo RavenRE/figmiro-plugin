@@ -1,20 +1,35 @@
+import {observable, action} from 'mobx';
 import {RootController} from 'rootController';
 import {IController} from 'utils/Controller';
 
 export class SettingsController implements IController {
+  @observable fetching = false;
+  @observable error = '';
 
-  constructor(private readonly rootController: RootController) {}
+  constructor(
+    private readonly rootController: RootController
+  ) {}
 
-  sync = (): void => {
-    const {
-      settingsAdditionsController: {
-        apply
-      }
-    } = this.rootController;
-    apply();
-  };
+  @action.bound async sync(): Promise<void> {
+    try {
+      this.fetching = true;
+      const {
+        settingsAdditionsController,
+        settingsSelectionController
+      } = this.rootController;
+      await settingsSelectionController.apply();
+      settingsAdditionsController.apply();
+    } catch (e) {
+      this.error = e;
+    } finally {
+      this.fetching = false;
+    }
+  }
 
   reset = (): void => {
+    if (this.fetching) return;
+
+    this.fetching = false;
     const {
       boardsController,
       settingsAdditionsController,
