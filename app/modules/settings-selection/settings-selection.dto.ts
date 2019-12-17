@@ -8,13 +8,15 @@ export class ProcessSyncArtboardsDTO {
 export class CreateImagesInMiroDTO {
   constructor(
     readonly boardId: string,
-    readonly images: string
+    readonly images: string,
+    readonly scale: boolean
   ) {}
 }
 
 export class SyncArtboardsDTO {
   constructor(
     readonly board: Board,
-    readonly selectionType: SettingsSelectionType
+    readonly selectionType: SettingsSelectionType,
+    readonly needScale: boolean
   ) {}
 }

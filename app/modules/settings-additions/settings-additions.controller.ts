@@ -1,4 +1,4 @@
-import {action, observable} from 'mobx';
+import {action, computed, observable} from 'mobx';
 import {RootController} from 'rootController';
 import {IController} from 'utils/Controller';
 import {SettingsAdditionsType} from './settings-additions.entity';
@@ -24,17 +24,22 @@ export class SettingsAdditionsController implements IController {
     this.selected = [...this.selected, type];
   }
 
-  apply = (): void => {
-    if (this.selected.includes(SettingsAdditionsType.OPEN_MIRO)) {
-      this.openBoardLink();
-    }
-  };
+  @computed get needOpenMiroBoard(): boolean {
+    return this.selected.includes(SettingsAdditionsType.OPEN_MIRO);
+  }
 
-  private openBoardLink = (): void => {
+  @computed get needScale(): boolean {
+    return this.selected.includes(SettingsAdditionsType.HALF_SCALE);
+  }
+
+  openBoardLink = (): void => {
     const {
       boardsController: {selectedBoard}
     } = this.rootController;
-    if (!selectedBoard) return;
+    if (
+      !selectedBoard ||
+      !this.needOpenMiroBoard
+    ) return;
     const link = createBoardLink(selectedBoard);
     window.open(link, '_blank');
   };

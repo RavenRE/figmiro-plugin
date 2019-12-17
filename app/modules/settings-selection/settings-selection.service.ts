@@ -1,7 +1,7 @@
 import {AppError} from 'utils/AppError';
 import {request} from 'helpers/request';
 import {FigmaMessage, MESSAGE_EVENT, sendMessageToFigma} from 'helpers/figmaMessaging';
-import {SettingsSelectionType} from './settings-selection.entity';
+import {Picture, SettingsSelectionType} from './settings-selection.entity';
 import {
   ProcessSyncArtboardsDTO,
   CreateImagesInMiroDTO,
@@ -17,10 +17,11 @@ export async function syncArtboards(
 ): Promise<void> {
   try {
     const images = await getImages(dto);
-    // await createImagesInMiro({
-    //   boardId: dto.board.id,
-    //   images
-    // });
+    await createImagesInMiro({
+      boardId: dto.board.id,
+      images,
+      scale: dto.needScale
+    });
   } catch (error) {
     throw error;
   }
@@ -53,7 +54,13 @@ export async function processSyncArtboards(
 
   if (!frames) return;
 
-  const images = await Promise.all(frames.map(frame => frame.exportAsync({format: 'PNG'})));
+  const images = await Promise.all(frames.map(async frame => new Picture(
+    await frame.exportAsync({format: 'PNG'}),
+    frame.x,
+    frame.y,
+    frame.width,
+    frame.height
+  )));
   figma.ui.postMessage({type: IMAGES_EXPORTED, value: JSON.stringify(images)});
 }
 

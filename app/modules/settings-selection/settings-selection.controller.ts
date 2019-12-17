@@ -19,15 +19,17 @@ export class SettingsSelectionController implements IController {
     this.selectionType = type;
   }
 
-  apply = async (): Promise<void> => {
+  syncBoards = async (): Promise<void> => {
     const {
-      boardsController: {selectedBoard}
+      boardsController: {selectedBoard},
+      settingsAdditionsController: {needScale}
     } = this.rootController;
 
     if (!selectedBoard) return;
     await syncArtboards({
       board: selectedBoard,
-      selectionType: this.selectionType
+      selectionType: this.selectionType,
+      needScale
     });
   };
 
