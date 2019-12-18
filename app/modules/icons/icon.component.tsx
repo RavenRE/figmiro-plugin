@@ -11,21 +11,17 @@ type Props = {
 } & WithClassName;
 
 @connect
-export class Icon extends React.Component<Props> {
+export class Icon extends React.Component<Props | RootController> {
   render(): React.ReactNode {
-    const {className, name} = this.props;
+    const {className, name} = this.props as Props;
     const {
       iconsController: {getIconMarkup}
-    } = this.rootController;
+    } = this.props as RootController;
     return (
       <div
         className={cn(className, styles.container)}
         dangerouslySetInnerHTML={{__html: getIconMarkup(name)}}
       />
     );
-  }
-
-  private get rootController(): RootController {
-    return this.props as RootController;
   }
 }
