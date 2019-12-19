@@ -1,7 +1,8 @@
 import {AppError} from 'utils/AppError';
 import {request} from 'helpers/request';
+import {setValueInStorage} from 'helpers/storage';
 import {FigmaMessage, MESSAGE_EVENT, sendMessageToFigma} from 'helpers/figmaMessaging';
-import {Picture, SettingsSelectionType} from './settings-selection.entity';
+import {Picture, SettingsSelectionType, Widget} from './settings-selection.entity';
 import {
   ProcessSyncArtboardsDTO,
   CreateImagesInMiroDTO,
@@ -17,11 +18,12 @@ export async function syncArtboards(
 ): Promise<void> {
   try {
     const images = await getImages(dto);
-    await createImagesInMiro({
+    const widgets = await createImagesInMiro({
       boardId: dto.board.id,
       images,
       scale: dto.needScale
     });
+    console.log(widgets);
   } catch (error) {
     throw error;
   }
@@ -55,6 +57,7 @@ export async function processSyncArtboards(
   if (!frames) return;
 
   const images = await Promise.all(frames.map(async frame => new Picture(
+    frame.id,
     await frame.exportAsync({format: 'PNG'}),
     frame.x,
     frame.y,
@@ -87,9 +90,10 @@ async function getImages(dto: SyncArtboardsDTO): Promise<string> {
   });
 }
 
-async function createImagesInMiro(dto: CreateImagesInMiroDTO): Promise<void> {
+async function createImagesInMiro(dto: CreateImagesInMiroDTO): Promise<Widget[]> {
   try {
-    await request.post('/pictures', dto);
+    const response = await request.post<Widget[]>('/pictures', dto);
+    return response.data;
   } catch (error) {
     throw new AppError(error.response.data.reason);
   }

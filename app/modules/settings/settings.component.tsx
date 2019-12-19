@@ -64,8 +64,8 @@ export class SettingsComponent extends React.Component {
     );
   }
 
-  componentDidMount() {
-    Promise.all([
+  async componentDidMount() {
+    await Promise.all([
       this.rootController.boardsController.fetchBoards()
     ]);
   }
