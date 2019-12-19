@@ -15,11 +15,23 @@ type SetValueInStorageDTO = {
   value: any;
 };
 
+type GetValueFromStorageDTO = {
+  key: string;
+};
+
+type NullifyValueByKeyInStorageDTO = {
+  key: string;
+};
+
+export function nullifyValueByKeyInStorage(dto: NullifyValueByKeyInStorageDTO): void {
+  setValueInStorage({key: dto.key, value: null});
+}
+
 export function setValueInStorage(dto: SetValueInStorageDTO): void {
   sendMessageToFigma({type: SET_VALUE, value: dto});
 }
 
-export async function getValueFromStorage(key: string): Promise<string> {
+export async function getValueFromStorage(dto: GetValueFromStorageDTO): Promise<string> {
   return new Promise((resolve, reject) => {
     const onMessageEvent = (event: MessageEvent) => {
       const {pluginMessage} = event.data;
@@ -30,7 +42,7 @@ export async function getValueFromStorage(key: string): Promise<string> {
       }
     };
     try {
-      sendMessageToFigma({type: GET_VALUE, value: {key}});
+      sendMessageToFigma({type: GET_VALUE, value: {key: dto.key}});
       window.addEventListener(MESSAGE_EVENT, onMessageEvent);
     } catch (error) {
       reject(error);
@@ -52,9 +64,6 @@ export async function processSetValueInStorage(
   await figma.clientStorage.setAsync(`${STORAGE_KEY}${msg.value.key}`, msg.value.value);
 }
 
-type GetValueFromStorageDTO = {
-  key: string;
-};
 export async function processGetValueFromStorage(
   figma: PluginAPI,
   msg: FigmaMessage<GetValueFromStorageDTO>

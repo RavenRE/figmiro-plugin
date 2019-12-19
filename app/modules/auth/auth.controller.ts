@@ -2,7 +2,7 @@ import {observable, action, computed} from 'mobx';
 import {IController} from 'utils/Controller';
 import {RootController} from 'rootController';
 import {
-  removeTokenInStorage,
+  removeTokenFromStorage,
   createTokenInStorage,
   getTokenFromStorage
 } from './auth.service';
@@ -30,7 +30,7 @@ export class AuthController implements IController {
   }
 
   @action.bound logout(): void {
-    removeTokenInStorage();
+    removeTokenFromStorage();
     Object.values(this.rootController)
       .forEach(controller => {
         controller.reset();

@@ -29,8 +29,8 @@ export class MainComponent extends React.Component {
     );
   }
 
-  componentDidMount() {
-    Promise.all([
+  async componentDidMount() {
+    await Promise.all([
       this.rootController.authController.checkToken(),
       this.rootController.iconsController.fetchIcons()
     ]);
