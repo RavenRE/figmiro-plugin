@@ -24,7 +24,7 @@ type NullifyValueByKeyInStorageDTO = {
 };
 
 export function nullifyValueByKeyInStorage(dto: NullifyValueByKeyInStorageDTO): void {
-  setValueInStorage({key: dto.key, value: null});
+  setValueInStorage({key: dto.key, value: undefined});
 }
 
 export function setValueInStorage(dto: SetValueInStorageDTO): void {

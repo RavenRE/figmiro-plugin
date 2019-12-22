@@ -4,7 +4,8 @@ import {RootController} from 'rootController';
 import {SettingsSelectionType} from './settings-selection.entity';
 import {
   getSelectionTypes,
-  syncArtboards
+  syncArtboards,
+  clearCache
 } from './settings-selection.service';
 
 export class SettingsSelectionController implements IController {
@@ -35,5 +36,6 @@ export class SettingsSelectionController implements IController {
 
   @action.bound reset(): void {
     this.selectionType = SettingsSelectionType.ALL;
+    clearCache();
   }
 }

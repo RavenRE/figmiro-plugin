@@ -3,7 +3,8 @@ import {AppError} from 'utils/AppError';
 import {request} from 'helpers/request';
 import {
   getValueFromStorage,
-  setValueInStorage
+  setValueInStorage,
+  nullifyValueByKeyInStorage
 } from 'helpers/storage';
 import {FigmaMessage, MESSAGE_EVENT, sendMessageToFigma} from 'helpers/figmaMessaging';
 import {
@@ -129,4 +130,8 @@ async function updateCache(widgets: Widgets): Promise<void> {
 
 async function getCache(): Promise<ArtboardsCache | undefined> {
   return getValueFromStorage<ArtboardsCache>({key: CACHE_KEY});
+}
+
+export function clearCache(): void {
+  nullifyValueByKeyInStorage({key: CACHE_KEY});
 }
