@@ -3,6 +3,7 @@ export enum SettingsSelectionType {
   SELECTED = 'selected'
 }
 
+export type Pictures = Picture[];
 export class Picture {
   constructor(
     readonly id: string,
@@ -10,10 +11,12 @@ export class Picture {
     readonly x: number,
     readonly y: number,
     readonly width: number,
-    readonly height: number
+    readonly height: number,
+    readonly resourceId?: string
   ) {}
 }
 
+export type Widgets = Widget[];
 export class Widget {
   constructor(
     readonly figmaId: string,
@@ -21,3 +24,8 @@ export class Widget {
     readonly name: string
   ) {}
 }
+
+type MiroWidgetId = string;
+export type ArtboardsCache = {
+  [artboardId: string]: MiroWidgetId
+};

@@ -1,5 +1,5 @@
 import {Board} from 'modules/boards';
-import {SettingsSelectionType} from './settings-selection.entity';
+import {SettingsSelectionType, Pictures} from './settings-selection.entity';
 
 export class ProcessSyncArtboardsDTO {
   constructor(readonly boardId: string) {}
@@ -8,7 +8,7 @@ export class ProcessSyncArtboardsDTO {
 export class CreateImagesInMiroDTO {
   constructor(
     readonly boardId: string,
-    readonly images: string,
+    readonly images: Pictures,
     readonly scale: boolean
   ) {}
 }

@@ -1,8 +1,18 @@
+import _ from 'lodash';
 import {AppError} from 'utils/AppError';
 import {request} from 'helpers/request';
-import {setValueInStorage} from 'helpers/storage';
+import {
+  getValueFromStorage,
+  setValueInStorage
+} from 'helpers/storage';
 import {FigmaMessage, MESSAGE_EVENT, sendMessageToFigma} from 'helpers/figmaMessaging';
-import {Picture, SettingsSelectionType, Widget} from './settings-selection.entity';
+import {
+  Picture,
+  Pictures,
+  SettingsSelectionType,
+  Widgets,
+  ArtboardsCache
+} from './settings-selection.entity';
 import {
   ProcessSyncArtboardsDTO,
   CreateImagesInMiroDTO,
@@ -23,7 +33,7 @@ export async function syncArtboards(
       images,
       scale: dto.needScale
     });
-    console.log(widgets);
+    await updateCache(widgets);
   } catch (error) {
     throw error;
   }
@@ -55,27 +65,29 @@ export async function processSyncArtboards(
   }
 
   if (!frames) return;
-
-  const images = await Promise.all(frames.map(async frame => new Picture(
-    frame.id,
-    await frame.exportAsync({format: 'PNG'}),
-    frame.x,
-    frame.y,
-    frame.width,
-    frame.height
-  )));
-  figma.ui.postMessage({type: IMAGES_EXPORTED, value: JSON.stringify(images)});
+  const images = await Promise.all(frames.map(async frame => ({
+    id: frame.id,
+    image: await frame.exportAsync({format: 'PNG'}),
+    x: frame.x,
+    y: frame.y,
+    width: frame.width,
+    height: frame.height
+  } as Picture)));
+  figma.ui.postMessage({type: IMAGES_EXPORTED, value: images});
 }
 
-async function getImages(dto: SyncArtboardsDTO): Promise<string> {
+async function getImages(dto: SyncArtboardsDTO): Promise<Pictures> {
+  const cache = await getCache();
   return new Promise((resolve, reject) => {
-    const onMessageEvent = (event: MessageEvent) => {
+    const onMessageEvent = async (event: MessageEvent) => {
       const {pluginMessage} = event.data;
-      switch (pluginMessage.type) {
-        case IMAGES_EXPORTED:
-          resolve(pluginMessage.value);
-          window.removeEventListener(MESSAGE_EVENT, onMessageEvent);
-      }
+      if (pluginMessage.type !== IMAGES_EXPORTED) return;
+      const images = pluginMessage.value as Pictures;
+      resolve(images.map(image => ({
+        ...image,
+        ...((cache && cache[image.id]) ? {resourceId: cache[image.id]} : {})
+      })));
+      window.removeEventListener(MESSAGE_EVENT, onMessageEvent);
     };
     try {
       sendMessageToFigma({
@@ -90,11 +102,31 @@ async function getImages(dto: SyncArtboardsDTO): Promise<string> {
   });
 }
 
-async function createImagesInMiro(dto: CreateImagesInMiroDTO): Promise<Widget[]> {
+async function createImagesInMiro(dto: CreateImagesInMiroDTO): Promise<Widgets> {
   try {
-    const response = await request.post<Widget[]>('/pictures', dto);
+    const response = await request.post<Widgets>('/pictures', dto);
     return response.data;
   } catch (error) {
     throw new AppError(error.response.data.reason);
   }
+}
+
+const CACHE_KEY = 'cache';
+async function updateCache(widgets: Widgets): Promise<void> {
+  const oldCache = await getCache();
+  const newWCache = _.chain(widgets)
+    .map(widget => ([
+      widget.figmaId,
+      widget.resourceId
+    ]))
+    .fromPairs()
+    .value();
+  setValueInStorage({
+    key: CACHE_KEY,
+    value: {...oldCache, ...newWCache}
+  });
+}
+
+async function getCache(): Promise<ArtboardsCache | undefined> {
+  return getValueFromStorage<ArtboardsCache>({key: CACHE_KEY});
 }

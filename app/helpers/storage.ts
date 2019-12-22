@@ -31,15 +31,13 @@ export function setValueInStorage(dto: SetValueInStorageDTO): void {
   sendMessageToFigma({type: SET_VALUE, value: dto});
 }
 
-export async function getValueFromStorage(dto: GetValueFromStorageDTO): Promise<string> {
+export async function getValueFromStorage<T>(dto: GetValueFromStorageDTO): Promise<T | undefined> {
   return new Promise((resolve, reject) => {
     const onMessageEvent = (event: MessageEvent) => {
       const {pluginMessage} = event.data;
-      switch (pluginMessage.type) {
-        case VALUE_RECEIVED:
-          resolve(pluginMessage.value);
-          window.removeEventListener(MESSAGE_EVENT, onMessageEvent);
-      }
+      if (pluginMessage.type !== VALUE_RECEIVED) return;
+      resolve(pluginMessage.value);
+      window.removeEventListener(MESSAGE_EVENT, onMessageEvent);
     };
     try {
       sendMessageToFigma({type: GET_VALUE, value: {key: dto.key}});
