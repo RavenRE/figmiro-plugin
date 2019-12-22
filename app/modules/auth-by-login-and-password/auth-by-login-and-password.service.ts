@@ -1,6 +1,6 @@
 import {AppError} from 'utils/AppError';
 import {request} from 'helpers/request';
-import {AuthByLoginAndPasswordDto} from './authByLoginAndPassword.dto';
+import {AuthByLoginAndPasswordDto} from './auth-by-login-and-password.dto';
 
 type AuthByLoginAndPasswordResponse = {
   token: string;

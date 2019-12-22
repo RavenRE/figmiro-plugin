@@ -3,25 +3,17 @@ import {IController} from 'utils/Controller';
 import {isEmail} from 'utils/isEmail';
 import {AppError} from 'utils/AppError';
 import {RootController} from 'rootController';
-import {AuthByLoginAndPasswordDto} from './authByLoginAndPassword.dto';
-import {authByLoginAndPassword} from './authByLoginAndPassword.service';
+import {AuthByLoginAndPasswordErrorType} from './auth-by-login-and-password.errors';
+import {AuthByLoginAndPasswordDto} from './auth-by-login-and-password.dto';
+import {authByLoginAndPassword} from './auth-by-login-and-password.service';
 
-enum ErrorType {
-  EMAIL_EMPTY = 'EMAIL_EMPTY',
-  PASSWORD_EMPTY = 'PASSWORD_EMPTY',
-  EMAIL_IS_NOT_CORRECT = 'EMAIL_IS_NOT_CORRECT',
-  AUTHORIZATION_FAILED = 'authorizationFailed',
-  SERVER_ERROR = 'Server Error',
-  NETWORK_ERROR = 'NETWORK_ERROR'
-}
 export class AuthByLoginAndPasswordController implements IController {
   @observable credentials: AuthByLoginAndPasswordDto = {
     email: '',
     password: ''
   };
   @observable fetching = false;
-  @observable error?: ErrorType;
-  errorTypes = ErrorType;
+  @observable error?: AuthByLoginAndPasswordErrorType;
 
   constructor(
     private readonly rootController: RootController
@@ -40,7 +32,7 @@ export class AuthByLoginAndPasswordController implements IController {
         this.error = error.status;
         return;
       }
-      this.error = ErrorType.NETWORK_ERROR;
+      this.error = AuthByLoginAndPasswordErrorType.NETWORK_ERROR;
     } finally {
       this.fetching = false;
     }
@@ -64,13 +56,13 @@ export class AuthByLoginAndPasswordController implements IController {
 
   private validate(): void | never {
     const isEmailEmpty = !this.credentials.email;
-    if (isEmailEmpty) throw new AppError(ErrorType.EMAIL_EMPTY);
+    if (isEmailEmpty) throw new AppError(AuthByLoginAndPasswordErrorType.EMAIL_EMPTY);
 
     const isPasswordEmpty = !this.credentials.password;
-    if (isPasswordEmpty) throw new AppError(ErrorType.PASSWORD_EMPTY);
+    if (isPasswordEmpty) throw new AppError(AuthByLoginAndPasswordErrorType.PASSWORD_EMPTY);
 
     const isWrongEmail = !isEmail(this.credentials.email);
-    if (isWrongEmail) throw new AppError(ErrorType.EMAIL_IS_NOT_CORRECT);
+    if (isWrongEmail) throw new AppError(AuthByLoginAndPasswordErrorType.EMAIL_IS_NOT_CORRECT);
   }
 
   @action.bound private resetErrors(): void {
