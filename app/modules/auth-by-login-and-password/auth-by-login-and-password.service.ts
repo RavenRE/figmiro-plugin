@@ -7,7 +7,7 @@ type AuthByLoginAndPasswordResponse = {
 };
 export async function authByLoginAndPassword(dto: AuthByLoginAndPasswordDto): Promise<string> {
   try {
-    const response = await request.post<AuthByLoginAndPasswordResponse>('/auth', dto);
+    const response = await request.post<AuthByLoginAndPasswordResponse>('/api/auth', dto);
     return response.data.token;
   } catch (error) {
     throw new AppError(error.response.data.reason);

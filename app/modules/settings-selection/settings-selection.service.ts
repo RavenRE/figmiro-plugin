@@ -105,7 +105,7 @@ async function getImages(dto: SyncArtboardsDTO): Promise<Pictures> {
 
 async function createImagesInMiro(dto: CreateImagesInMiroDTO): Promise<Widgets> {
   try {
-    const response = await request.post<Widgets>('/pictures', dto);
+    const response = await request.post<Widgets>('/api/pictures', dto);
     return response.data;
   } catch (error) {
     throw new AppError(error.response.data.reason);
