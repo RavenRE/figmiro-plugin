@@ -10,8 +10,6 @@ export class Picture {
     readonly image: Uint8Array,
     readonly x: number,
     readonly y: number,
-    readonly width: number,
-    readonly height: number,
     readonly resourceId?: string
   ) {}
 }

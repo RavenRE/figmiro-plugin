@@ -8,7 +8,6 @@ import {
 } from 'helpers/storage';
 import {FigmaMessage, MESSAGE_EVENT, sendMessageToFigma} from 'helpers/figmaMessaging';
 import {
-  Picture,
   Pictures,
   SettingsSelectionType,
   Widgets,
@@ -70,10 +69,8 @@ export async function processSyncArtboards(
     id: frame.id,
     image: await frame.exportAsync({format: 'PNG'}),
     x: frame.x,
-    y: frame.y,
-    width: frame.width,
-    height: frame.height
-  } as Picture)));
+    y: frame.y
+  })));
   figma.ui.postMessage({type: IMAGES_EXPORTED, value: images});
 }
 
