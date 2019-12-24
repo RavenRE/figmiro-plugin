@@ -14,11 +14,13 @@ export class SettingsController implements IController {
     try {
       this.fetching = true;
       const {
-        settingsAdditionsController: {openBoardLink},
+        settingsAdditionsController: {openBoardLink, needOpenMiroBoard},
         settingsSelectionController: {syncBoards}
       } = this.rootController;
       await syncBoards();
-      openBoardLink();
+      if (needOpenMiroBoard) {
+        openBoardLink();
+      }
     } catch (e) {
       this.error = e;
     } finally {

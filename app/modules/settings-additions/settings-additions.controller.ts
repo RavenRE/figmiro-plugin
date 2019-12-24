@@ -36,10 +36,7 @@ export class SettingsAdditionsController implements IController {
     const {
       boardsController: {selectedBoard}
     } = this.rootController;
-    if (
-      !selectedBoard ||
-      !this.needOpenMiroBoard
-    ) return;
+    if (!selectedBoard) return;
     const link = createBoardLink(selectedBoard);
     window.open(link, '_blank');
   };
