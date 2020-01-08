@@ -36,6 +36,7 @@ export class SettingsComponent extends React.Component {
           done={doneStagesAmount}
           total={totalSyncStages}
           label={mapSyncStageToProgressLabel(currentSyncStage)}
+          doneLabel={DONE_LABEL}
           className={styles.progress}
         />
         <div className={styles.intro}>
@@ -92,3 +93,4 @@ const mapSyncStageToProgressLabel = (stage?: SyncProgressStage): string | undefi
   };
   return mapper[stage];
 };
+const DONE_LABEL = 'Sync Done!';
