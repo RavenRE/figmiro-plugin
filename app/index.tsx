@@ -3,7 +3,7 @@ import {
   processGetValueFromStorage,
   processSetValueInStorage
 } from 'helpers/storage';
-import {processSyncArtboards} from 'modules/settings-selection/settings-selection.service';
+import {processSyncArtboards} from 'modules/settings/settings.service';
 
 figma.showUI(__html__, {width: 300, height: 280});
 

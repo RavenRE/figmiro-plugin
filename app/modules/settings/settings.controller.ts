@@ -1,6 +1,7 @@
 import {observable, action} from 'mobx';
 import {RootController} from 'rootController';
 import {IController} from 'utils/Controller';
+import {getImages, createImagesInMiro, clearCache, updateCache} from './settings.service';
 
 export class SettingsController implements IController {
   @observable fetching = false;
@@ -14,13 +15,26 @@ export class SettingsController implements IController {
     try {
       this.fetching = true;
       const {
-        settingsAdditionsController: {openBoardLink, needOpenMiroBoard},
-        settingsSelectionController: {syncBoards}
+        boardsController: {selectedBoard},
+        settingsAdditionsController: {openBoardLink, needOpenMiroBoard, needScale},
+        settingsSelectionController: {selectionType}
       } = this.rootController;
-      await syncBoards();
-      if (needOpenMiroBoard) {
-        openBoardLink();
-      }
+      if (!selectedBoard) return;
+
+      const images = await getImages({
+        boardId: selectedBoard.id,
+        selectionType
+      });
+
+      const widgets = await createImagesInMiro(
+        {
+          boardId: selectedBoard.id,
+          images,
+          scale: needScale
+        }
+      );
+      await updateCache(widgets);
+      if (needOpenMiroBoard) openBoardLink();
     } catch (e) {
       this.error = e;
     } finally {
@@ -40,5 +54,6 @@ export class SettingsController implements IController {
     boardsController.resetSelected();
     settingsAdditionsController.reset();
     settingsSelectionController.reset();
+    clearCache();
   };
 }

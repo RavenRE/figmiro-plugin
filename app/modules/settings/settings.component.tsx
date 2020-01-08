@@ -20,10 +20,6 @@ export class SettingsComponent extends React.Component {
         reset,
         fetching: syncFetching
       },
-      settingsSelectionController: {
-        syncedAmount,
-        totalAmount
-      },
       boardsController: {
         fetching: boardsFetching,
         selectedBoard
@@ -33,8 +29,8 @@ export class SettingsComponent extends React.Component {
     return (
       <>
         <Progress
-          done={syncedAmount}
-          total={totalAmount}
+          done={3}
+          total={5}
           className={styles.progress}
         />
         <div className={styles.intro}>
