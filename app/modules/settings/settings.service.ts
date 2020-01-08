@@ -12,13 +12,18 @@ import {
   Pictures,
   Widgets,
   ArtboardsCache,
-  Picture
+  Picture,
+  SyncProgressStage
 } from './settings.entity';
 import {
   ProcessSyncArtboardsDTO,
   CreateImagesInMiroDTO,
   SyncArtboardsDTO
 } from './settings.dto';
+
+export function getProgressStages(): SyncProgressStage[] {
+  return Object.values(SyncProgressStage);
+}
 
 const IMAGES_EXPORTED = 'IMAGES_EXPORTED';
 export async function processSyncArtboards(

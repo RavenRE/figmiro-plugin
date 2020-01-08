@@ -8,6 +8,7 @@ import {Button, ButtonMode} from 'components/button';
 import {Icon, IconName} from 'modules/icons';
 import {Loader} from 'components/loader';
 import {Progress} from 'components/progress';
+import {SyncProgressStage} from './settings.entity';
 import styles from './settings.component.sass';
 
 @connect
@@ -18,7 +19,10 @@ export class SettingsComponent extends React.Component {
       settingsController: {
         sync,
         reset,
-        fetching: syncFetching
+        fetching: syncFetching,
+        totalSyncStages,
+        doneStagesAmount,
+        currentSyncStage
       },
       boardsController: {
         fetching: boardsFetching,
@@ -29,8 +33,9 @@ export class SettingsComponent extends React.Component {
     return (
       <>
         <Progress
-          done={3}
-          total={5}
+          done={doneStagesAmount}
+          total={totalSyncStages}
+          label={mapSyncStageToProgressLabel(currentSyncStage)}
           className={styles.progress}
         />
         <div className={styles.intro}>
@@ -77,3 +82,13 @@ export class SettingsComponent extends React.Component {
     return (this.props as RootController);
   }
 }
+
+const mapSyncStageToProgressLabel = (stage?: SyncProgressStage): string | undefined => {
+  if (!stage) return;
+  const mapper = {
+    [SyncProgressStage.IMAGES_EXPORTING]: 'Exporting artboards...',
+    [SyncProgressStage.IMAGE_SENDING_TO_MIRO]: 'Sending images to Miro...',
+    [SyncProgressStage.CACHE_UPDATING]: 'Updating cache...'
+  };
+  return mapper[stage];
+};
