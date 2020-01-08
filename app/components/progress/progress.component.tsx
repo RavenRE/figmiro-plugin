@@ -8,11 +8,12 @@ type Props = {
   total: number
 } & WithClassName;
 
-export const Progress: React.FC<Props> = ({className, total, done}) =>
-  <div
-    className={cn(styles.container, className)}
-    style={{
-      width: `${Math.round((done / total) * 100)}%`,
-      transition: 'width .3s'
-    }}
-  />;
+export const Progress: React.FC<Props> = ({className, total, done}) => {
+  if (!total) return null;
+  return (
+    <div
+      className={cn(styles.container, className, {[styles['is-done']]: total === done})}
+      style={{width: `${Math.round((done / total) * 100)}%`}}
+    />
+  );
+};

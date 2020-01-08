@@ -24,22 +24,6 @@ export function getSelectionTypes(): SettingsSelectionType[] {
   return Object.values(SettingsSelectionType);
 }
 
-export async function syncArtboards(
-  dto: SyncArtboardsDTO
-): Promise<void> {
-  try {
-    const images = await getImages(dto);
-    const widgets = await createImagesInMiro({
-      boardId: dto.board.id,
-      images,
-      scale: dto.needScale
-    });
-    await updateCache(widgets);
-  } catch (error) {
-    throw error;
-  }
-}
-
 const IMAGES_EXPORTED = 'IMAGES_EXPORTED';
 export async function processSyncArtboards(
   figma: PluginAPI,
@@ -76,7 +60,7 @@ export async function processSyncArtboards(
   figma.ui.postMessage({type: IMAGES_EXPORTED, value: images});
 }
 
-async function getImages(dto: SyncArtboardsDTO): Promise<Pictures> {
+export async function getImages(dto: SyncArtboardsDTO): Promise<Pictures> {
   const cache = await getCache();
   return new Promise((resolve, reject) => {
     const onMessageEvent = async (event: MessageEvent) => {
@@ -102,7 +86,7 @@ async function getImages(dto: SyncArtboardsDTO): Promise<Pictures> {
   });
 }
 
-async function createImagesInMiro(dto: CreateImagesInMiroDTO): Promise<Widgets> {
+export async function createImagesInMiro(dto: CreateImagesInMiroDTO): Promise<Widgets> {
   try {
     const response = await request.post<Widgets>('/api/pictures', dto);
     return response.data;
@@ -112,7 +96,7 @@ async function createImagesInMiro(dto: CreateImagesInMiroDTO): Promise<Widgets> 
 }
 
 const CACHE_KEY = 'cache';
-async function updateCache(widgets: Widgets): Promise<void> {
+export async function updateCache(widgets: Widgets): Promise<void> {
   const oldCache = await getCache();
   const newWCache = _.chain(widgets)
     .map(widget => ([

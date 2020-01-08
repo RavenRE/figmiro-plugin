@@ -20,6 +20,10 @@ export class SettingsComponent extends React.Component {
         reset,
         fetching: syncFetching
       },
+      settingsSelectionController: {
+        syncedAmount,
+        totalAmount
+      },
       boardsController: {
         fetching: boardsFetching,
         selectedBoard
@@ -27,10 +31,10 @@ export class SettingsComponent extends React.Component {
     } = this.rootController;
     if (boardsFetching) return <Loader/>;
     return (
-      <div>
+      <>
         <Progress
-          done={3}
-          total={5}
+          done={syncedAmount}
+          total={totalAmount}
           className={styles.progress}
         />
         <div className={styles.intro}>
@@ -50,10 +54,7 @@ export class SettingsComponent extends React.Component {
           <SettingsAdditionsComponent/>
         </div>
         <div className={styles.btns}>
-          <Button
-            className={styles.btn}
-            onClick={reset}
-          >
+          <Button className={styles.btn} onClick={reset}>
             Cancel
           </Button>
           <Button
@@ -66,7 +67,7 @@ export class SettingsComponent extends React.Component {
             Sync
           </Button>
         </div>
-      </div>
+      </>
     );
   }
 
