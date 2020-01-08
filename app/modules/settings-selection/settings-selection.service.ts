@@ -11,7 +11,8 @@ import {
   Pictures,
   SettingsSelectionType,
   Widgets,
-  ArtboardsCache
+  ArtboardsCache,
+  Picture
 } from './settings-selection.entity';
 import {
   ProcessSyncArtboardsDTO,
@@ -65,8 +66,9 @@ export async function processSyncArtboards(
   }
 
   if (!frames) return;
-  const images = await Promise.all(frames.map(async frame => ({
+  const images = await Promise.all(frames.map(async (frame): Promise<Picture> => ({
     id: frame.id,
+    name: frame.name,
     image: await frame.exportAsync({format: 'PNG'}),
     x: frame.x,
     y: frame.y

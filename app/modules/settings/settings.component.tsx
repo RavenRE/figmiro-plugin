@@ -7,6 +7,7 @@ import {SettingsAdditionsComponent} from 'modules/settings-additions';
 import {Button, ButtonMode} from 'components/button';
 import {Icon, IconName} from 'modules/icons';
 import {Loader} from 'components/loader';
+import {Progress} from 'components/progress';
 import styles from './settings.component.sass';
 
 @connect
@@ -27,6 +28,11 @@ export class SettingsComponent extends React.Component {
     if (boardsFetching) return <Loader/>;
     return (
       <div>
+        <Progress
+          done={3}
+          total={5}
+          className={styles.progress}
+        />
         <div className={styles.intro}>
           <div className={styles.title}>
             Settings
