@@ -1,43 +1,46 @@
-.container
-  position: relative
+\:global
+  .dropdown
+    &__control,
+    &__menu
+      border-radius: 2px !important
 
+    &__control
+      border: 1px solid $cblack1 !important
 
-.selected,
-.items
-  background-color: $cwhite
-  border: 1px solid $cblack1
-  border-radius: 2px
+      &--is-focused
+        border-color: $cblue !important
 
-  &:focus
-    border-color: $cblue
+      &--menu-is-open
+        .dropdown__indicator
+          transform: rotate(180deg)
 
-.selected,
-.item
-  padding: 8px
+    &__indicators
+      padding: 8px
 
-.selected
-  display: flex
-  justify-content: space-between
-  align-items: center
-  cursor: pointer
+    &__indicator-separator
+      visibility: hidden
 
-.selected-arrow
-  width: 10px
-  height: 6px
+    &__indicator
+      display: flex
+      justify-content: center
+      align-items: center
+      width: 10px
+      height: 6px
+      padding: 0 !important
 
-.items
-  display: none
-  overflow-y: scroll
-  max-height: 162px
-  margin-top: -1px
-  position: absolute
-  top: 100%
-  left: 0
-  right: 0
+    &__menu
+      width: auto !important
+      left: 1px
+      right: 1px
 
-.is-open
-  .items
-    display: block
+    &__menu-list
+      padding: 0 !important
 
-  .selected-arrow
-    transform: rotate(180deg)
+    &__option
+      background-color: transparent !important
+      color: $cblack !important
+
+      &--is-focused,
+      &--is-selected
+        color: $cblue !important
+

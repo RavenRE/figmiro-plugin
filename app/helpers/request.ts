@@ -2,7 +2,7 @@ import axios from 'axios';
 import {getTokenFromStorage} from 'modules/auth/auth.service';
 
 export const request = axios.create({
-  baseURL: 'https://b6b699fa.ngrok.io'
+  baseURL: 'https://7216ff16.ngrok.io'
 });
 
 request.interceptors.request.use(async config => {

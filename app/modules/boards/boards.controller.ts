@@ -20,7 +20,7 @@ export class BoardsController implements IController {
     }
   }
 
-  @action.bound selectBoard(id: string): void {
+  @action.bound selectBoard(id: string) {
     this.selectedBoard = this.boards.find((board: Board) => board.id === id);
   }
 

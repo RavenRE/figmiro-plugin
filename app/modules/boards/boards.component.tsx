@@ -2,7 +2,7 @@ import React from 'react';
 import {connect} from 'helpers/connect';
 import {RootController} from 'rootController';
 import {Boards, Board} from 'modules/boards';
-import {DDItems, DDItem, Dropdown} from 'components/dropdown';
+import {DDItems, DDItem, onDDChange, Dropdown} from 'components/dropdown';
 
 @connect
 export class BoardsComponent extends React.Component {
@@ -14,9 +14,10 @@ export class BoardsComponent extends React.Component {
     } = this.controller;
     return (
       <Dropdown
-        items={mapBoardsToDDItems(boards)}
-        selected={mapBoardToDDItem(selectedBoard)}
-        onItemClick={selectBoard}
+        options={mapBoardsToDDItems(boards)}
+        defaultValue={mapBoardToDDItem(selectedBoard)}
+        onChange={mapSelectBoardToDDOnChange(selectBoard)}
+        noOptionsMessage={noOptionsMessage}
       />
     );
   }
@@ -26,12 +27,18 @@ export class BoardsComponent extends React.Component {
   }
 }
 
-const PLACEHOLDER_BOARD: Board = {
-  id: 'PLACEHOLDER_BOARD',
-  title: 'Please, choose Miro\'s board'
+const PLACEHOLDER_BOARD: DDItem = {
+  value: 'PLACEHOLDER_BOARD',
+  label: 'Please, choose Miro\'s board'
 };
+const noOptionsMessage = () => 'No such board';
 const mapBoardsToDDItems = (boards: Boards): DDItems => boards.map(mapBoardToDDItem);
-const mapBoardToDDItem = (board = PLACEHOLDER_BOARD): DDItem => ({
-  id: board.id,
-  value: board.title
-});
+const mapBoardToDDItem = (board?: Board): DDItem => board ? ({
+  value: board.id,
+  label: board.title
+}) : PLACEHOLDER_BOARD;
+const mapSelectBoardToDDOnChange =
+  (selectBoard: (id: string) => void): onDDChange =>
+  (option): void => {
+      selectBoard((option as DDItem).value);
+  };
