@@ -38,21 +38,18 @@ export class SettingsSelectionController implements IController {
       selectionType: this.selectionType,
       needScale
     });
-    this.totalAmount = images.length;
 
-    let widgets: Widgets = [];
-    for (const image of images) {
-      const response = await createImagesInMiro({
+    const widgets = await createImagesInMiro(
+      {
         boardId: selectedBoard.id,
-        images: [image],
+        images,
         scale: needScale
-      });
-      widgets = [
-        ...response,
-        ...widgets
-      ];
-      this.syncedAmount = this.syncedAmount + 1;
-    }
+      },
+        progressEvent => {
+        this.totalAmount = progressEvent.total;
+        this.syncedAmount = progressEvent.loaded;
+      }
+    );
     await updateCache(widgets);
   }
 
