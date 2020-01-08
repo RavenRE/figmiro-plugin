@@ -1,12 +1,13 @@
 import {action, observable} from 'mobx';
 import {IController} from 'utils/Controller';
 import {RootController} from 'rootController';
-import {SettingsSelectionType, Widgets} from './settings-selection.entity';
+import {SettingsSelectionType} from './settings-selection.entity';
 import {
   getSelectionTypes,
   createImagesInMiro,
   clearCache,
-  getImages, updateCache
+  getImages,
+  updateCache
 } from './settings-selection.service';
 
 export class SettingsSelectionController implements IController {
@@ -24,39 +25,45 @@ export class SettingsSelectionController implements IController {
   }
 
   @action.bound async syncBoards(): Promise<void> {
-    this.totalAmount = 0;
-    this.syncedAmount = 0;
+    try {
+      this.resetProgress();
+      const {
+        boardsController: {selectedBoard},
+        settingsAdditionsController: {needScale}
+      } = this.rootController;
+      if (!selectedBoard) return;
 
-    const {
-      boardsController: {selectedBoard},
-      settingsAdditionsController: {needScale}
-    } = this.rootController;
-    if (!selectedBoard) return;
+      const images = await getImages({
+        board: selectedBoard,
+        selectionType: this.selectionType,
+        needScale
+      });
 
-    const images = await getImages({
-      board: selectedBoard,
-      selectionType: this.selectionType,
-      needScale
-    });
-
-    const widgets = await createImagesInMiro(
-      {
-        boardId: selectedBoard.id,
-        images,
-        scale: needScale
-      },
-        progressEvent => {
-        this.totalAmount = progressEvent.total;
-        this.syncedAmount = progressEvent.loaded;
+      this.totalAmount = images.length;
+      for (const image of images) {
+        const widgets = await createImagesInMiro(
+          {
+            boardId: selectedBoard.id,
+            images: [image],
+            scale: needScale
+          }
+        );
+        await updateCache(widgets);
+        this.syncedAmount = this.syncedAmount + 1;
       }
-    );
-    await updateCache(widgets);
+    } catch (e) {
+      this.resetProgress();
+    }
   }
 
   @action.bound reset(): void {
     this.selectionType = SettingsSelectionType.ALL;
+    this.resetProgress();
+    clearCache();
+  }
+
+  @action.bound resetProgress(): void {
     this.syncedAmount = 0;
     this.totalAmount = 0;
-    clearCache();
   }
 }

@@ -19,7 +19,6 @@ import {
   CreateImagesInMiroDTO,
   SyncArtboardsDTO
 } from './settings-selection.dto';
-import {v1} from 'uuid/interfaces';
 
 export function getSelectionTypes(): SettingsSelectionType[] {
   return Object.values(SettingsSelectionType);
@@ -88,13 +87,10 @@ export async function getImages(dto: SyncArtboardsDTO): Promise<Pictures> {
 }
 
 export async function createImagesInMiro(
-  dto: CreateImagesInMiroDTO,
-  onUploadProgress?: (progressEvent: {loaded: number, total: number}) => void
+  dto: CreateImagesInMiroDTO
 ): Promise<Widgets> {
   try {
-    const response = await request.post<Widgets>('/api/pictures', dto, {
-      onUploadProgress
-    });
+    const response = await request.post<Widgets>('/api/pictures', dto);
     return response.data;
   } catch (error) {
     throw new AppError(error.response.data.reason);
