@@ -1,4 +1,4 @@
-import {action, observable, computed} from 'mobx';
+import {action, computed, observable} from 'mobx';
 import {RootController} from 'rootController';
 import {IController} from 'utils/Controller';
 import {clearCache, createImagesInMiro, getImages, getProgressStages, updateCache} from './settings.service';
@@ -10,9 +10,7 @@ export class SettingsController implements IController {
   @observable fetching = false;
   @observable error = '';
 
-  constructor(
-    private readonly rootController: RootController
-  ) {}
+  constructor(private readonly rootController: RootController) {}
 
   @action.bound async sync(): Promise<void> {
     try {
@@ -38,6 +36,9 @@ export class SettingsController implements IController {
           boardId: selectedBoard.id,
           images,
           scale: needScale
+        },
+        () => {
+          this.goToSyncStage(SyncProgressStage.UPLOAD_TO_SERVER);
         }
       );
 

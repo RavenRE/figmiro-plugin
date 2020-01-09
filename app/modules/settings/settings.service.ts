@@ -88,10 +88,11 @@ export async function getImages(dto: SyncArtboardsDTO): Promise<Pictures> {
 }
 
 export async function createImagesInMiro(
-  dto: CreateImagesInMiroDTO
+  dto: CreateImagesInMiroDTO,
+  onUploadProgress: (progressEvent: {}) => void
 ): Promise<Widgets> {
   try {
-    const response = await request.post<Widgets>('/api/pictures', dto);
+    const response = await request.post<Widgets>('/api/pictures', dto, {onUploadProgress});
     return response.data;
   } catch (error) {
     throw new AppError(error.response.data.reason);

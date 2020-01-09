@@ -88,6 +88,7 @@ const mapSyncStageToProgressLabel = (stage?: SyncProgressStage): string | undefi
   if (!stage) return;
   const mapper = {
     [SyncProgressStage.IMAGES_EXPORTING]: 'Exporting artboards...',
+    [SyncProgressStage.UPLOAD_TO_SERVER]: 'Uploading to server...',
     [SyncProgressStage.IMAGE_SENDING_TO_MIRO]: 'Sending images to Miro...',
     [SyncProgressStage.CACHE_UPDATING]: 'Updating cache...'
   };
