@@ -36,9 +36,6 @@ export class SettingsController implements IController {
           boardId: selectedBoard.id,
           images,
           scale: needScale
-        },
-        () => {
-          this.goToSyncStage(SyncProgressStage.UPLOAD_TO_SERVER);
         }
       );
 
