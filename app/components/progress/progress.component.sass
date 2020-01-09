@@ -1,5 +1,8 @@
 .container
   position: relative
+  transition-property: opacity
+  transition-duration: .3s
+  transition-delay: 4s
 
 .progress
   height: 4px
@@ -13,6 +16,9 @@
   right: 16px
   font-size: 9px
 
-.is-done .progress
-  background-color: $cgreen
+.is-done
+  &.container
+    opacity: 0
 
+  & .progress
+    background-color: $cgreen

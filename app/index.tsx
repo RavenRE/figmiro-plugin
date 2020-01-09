@@ -5,7 +5,7 @@ import {
 } from 'helpers/storage';
 import {processSyncArtboards} from 'modules/settings/settings.service';
 
-figma.showUI(__html__, {width: 300, height: 290});
+figma.showUI(__html__, {width: 300, height: 300});
 
 figma.ui.onmessage = async msg => {
   await processGetValueFromStorage(figma, msg);
