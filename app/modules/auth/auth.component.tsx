@@ -1,5 +1,5 @@
 import React from 'react';
-import {AuthByLoginAndPasswordComponent} from 'modules/authByLoginAndPassword';
+import {AuthByLoginAndPasswordComponent} from 'modules/auth-by-login-and-password';
 import styles from './auth.component.sass';
 
 export class AuthComponent extends React.Component {

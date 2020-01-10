@@ -16,6 +16,7 @@
         "no-parameter-reassignment": true,
         "promise-function-async": true,
         "await-promise": true,
+        "max-classes-per-file": [false],
         "no-floating-promises": true,
         "no-inferred-empty-object-type": false,
         "no-invalid-template-strings": true,

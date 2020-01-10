@@ -15,13 +15,11 @@ export class Input extends React.Component<Props> {
       ...props
     } = this.props;
     return (
-      <div className={cn(styles.container, className)}>
-        <input
-          {...props}
-          className={styles.input}
-          onChange={this.onChange}
-        />
-      </div>
+      <input
+        {...props}
+        className={cn(className, styles.container)}
+        onChange={this.onChange}
+      />
     );
   }
 

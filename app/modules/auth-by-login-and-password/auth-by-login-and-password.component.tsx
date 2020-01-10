@@ -3,12 +3,14 @@ import {connect} from 'helpers/connect';
 import {RootController} from 'rootController';
 import {Input} from 'components/input';
 import {Button, ButtonMode} from 'components/button';
-import styles from './authByLoginAndPassword.component.sass';
+import {AuthByLoginAndPasswordErrorType} from './auth-by-login-and-password.errors';
+import styles from './auth-by-login-and-password.component.sass';
 
 @connect
 export class AuthByLoginAndPasswordComponent extends React.Component {
   render(): React.ReactNode {
     const {
+      fetching,
       changeEmail,
       changePassword,
       reset
@@ -21,7 +23,6 @@ export class AuthByLoginAndPasswordComponent extends React.Component {
         {this.error && <div className={styles.error}>{this.error}</div>}
         <Input
           placeholder="Email"
-          type="email"
           onChange={changeEmail}
           className={styles.input}
         />
@@ -43,6 +44,7 @@ export class AuthByLoginAndPasswordComponent extends React.Component {
             type="submit"
             className={styles.btn}
             mode={ButtonMode.PRIMARY}
+            fetching={fetching}
           >
             Sign In
           </Button>
@@ -57,15 +59,17 @@ export class AuthByLoginAndPasswordComponent extends React.Component {
   };
 
   private get error(): string | undefined {
-    const {errorTypes, error} = this.controller;
+    const {error} = this.controller;
     if (!error) return;
     const errorMapper = {
-      [errorTypes.EMAIL_EMPTY]: 'Email field is empty.',
-      [errorTypes.PASSWORD_EMPTY]: 'Password field is empty.',
-      [errorTypes.EMAIL_IS_NOT_CORRECT]: 'Email is not correct.',
-      [errorTypes.AUTHORIZATION_FAILED]: 'Authorization Failed. Please, check your email and password.',
-      [errorTypes.SERVER_ERROR]: 'Server error.',
-      [errorTypes.NETWORK_ERROR]: 'Network error. Please, check connection.'
+      [AuthByLoginAndPasswordErrorType.EMAIL_EMPTY]: 'Email field is empty.',
+      [AuthByLoginAndPasswordErrorType.PASSWORD_EMPTY]: 'Password field is empty.',
+      [AuthByLoginAndPasswordErrorType.EMAIL_IS_NOT_CORRECT]: 'Email is not correct.',
+      [AuthByLoginAndPasswordErrorType.AUTHORIZATION_FAILED]:
+        'Authorization Failed. Please, check your email and password.',
+      [AuthByLoginAndPasswordErrorType.SERVER_ERROR]: 'Server error.',
+      [AuthByLoginAndPasswordErrorType.NETWORK_ERROR]: 'Network error. Please, check connection.',
+      [AuthByLoginAndPasswordErrorType.PASSWORD_NOT_SET]: 'Password in user profile not set.'
     };
     return errorMapper[error];
   }

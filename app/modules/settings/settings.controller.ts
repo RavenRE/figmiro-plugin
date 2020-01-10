@@ -1,51 +1,85 @@
-import {action, observable} from 'mobx';
+import {action, computed, observable} from 'mobx';
 import {RootController} from 'rootController';
-import {Board} from 'modules/boards';
 import {IController} from 'utils/Controller';
-import {requestSyncAll, requestSyncSelection} from './settings.service';
-
-enum SyncType {
-  ALL = 'all',
-  SELECTION = 'selection'
-}
+import {clearCache, createImagesInMiro, getImages, getProgressStages, updateCache} from './settings.service';
+import {SyncProgressStage} from './settings.entity';
 
 export class SettingsController implements IController {
-  @observable itemsToSync: SyncType = SyncType.ALL;
+  totalSyncStages = getProgressStages().length;
+  @observable doneSyncStages: SyncProgressStage[] = [];
+  @observable fetching = false;
+  @observable error = '';
 
   constructor(private readonly rootController: RootController) {}
 
-  @action.bound sync(): void {
-    switch (this.itemsToSync) {
-      case SyncType.ALL:
-        this.syncAll();
-        break;
-      case SyncType.SELECTION:
-        this.syncSelection();
-        break;
+  @action.bound async sync(): Promise<void> {
+    try {
+      this.fetching = true;
+      this.resetDoneSyncStages();
+
+      const {
+        boardsController: {selectedBoard},
+        settingsAdditionsController: {openBoardLink, needOpenMiroBoard, needScale},
+        settingsSelectionController: {selectionType}
+      } = this.rootController;
+      if (!selectedBoard) return;
+
+      this.goToSyncStage(SyncProgressStage.IMAGES_EXPORTING);
+      const images = await getImages({
+        boardId: selectedBoard.id,
+        selectionType
+      });
+
+      this.goToSyncStage(SyncProgressStage.IMAGE_SENDING_TO_MIRO);
+      const widgets = await createImagesInMiro(
+        {
+          boardId: selectedBoard.id,
+          images,
+          scale: needScale
+        }
+      );
+
+      this.goToSyncStage(SyncProgressStage.CACHE_UPDATING);
+      await updateCache(widgets);
+      if (needOpenMiroBoard) openBoardLink();
+    } catch (e) {
+      this.error = e;
+      this.resetDoneSyncStages();
+    } finally {
+      this.fetching = false;
     }
   }
 
-  @action.bound changeSyncType(type: SyncType): void {
-    this.itemsToSync = type;
+  @computed get doneStagesAmount(): number {
+    return this.doneSyncStages.length;
   }
 
-  @action.bound syncAll(): void {
-    if (this.selectedBoard) {
-      requestSyncAll(this.selectedBoard);
-    }
+  @computed get currentSyncStage(): SyncProgressStage | undefined {
+    if (!this.doneSyncStages.length || !this.fetching) return;
+    return this.doneSyncStages[0];
   }
 
-  @action.bound syncSelection(): void {
-    if (this.selectedBoard) {
-      requestSyncSelection(this.selectedBoard);
-    }
+  @action.bound reset() {
+    if (this.fetching) return;
+
+    this.fetching = false;
+    const {
+      boardsController,
+      settingsAdditionsController,
+      settingsSelectionController
+    } = this.rootController;
+    boardsController.resetSelected();
+    settingsAdditionsController.reset();
+    settingsSelectionController.reset();
+    clearCache();
+    this.resetDoneSyncStages();
   }
 
-  get selectedBoard(): Board | undefined {
-    return this.rootController.boardsController.selectedBoard;
+  @action.bound private goToSyncStage(stage: SyncProgressStage): void {
+    this.doneSyncStages = [stage, ...this.doneSyncStages];
   }
 
-  @action.bound reset(): void {
-    this.itemsToSync = SyncType.ALL;
+  @action.bound private resetDoneSyncStages(): void {
+    this.doneSyncStages = [];
   }
 }

@@ -1,41 +1,49 @@
-.container,
-.btn
+.container
+  position: relative
+  padding: 7px 16px
   border: 1px solid transparent
   border-radius: 6px
-
-.btn
-  padding: 7px 16px
 
   &:disabled
     pointer-events: none
 
+.loader
+  display: none
+  position: absolute
+  margin: -.2em auto 0 -.3em
+  top: 50%
+  left: 50%
+  transform: translate(-50%, -50%)
+  font-size: 8px
+
 .primary
-  &:focus-within
+  background-color: $cblue
+  color: $cwhite
+
+  &:focus
     border-color: $cblueblack
 
-  .btn
-    background-color: $cblue
-    color: $cwhite
-
-    &:focus
-      border-color: $cblueblack
-
-    &:disabled
-      background-color: $cblack3
+  &:disabled
+    background-color: $cblack3
 
 .secondary
-  &:focus-within
+  border-color: $cblack
+  background-color: $cwhite
+  color: $cblack
+
+  &:focus
     border-color: $cblue
 
-  .btn
-    border-color: $cblack
-    background-color: $cwhite
-    color: $cblack
+  &:disabled
+    color: $cblack3
+    border-color: $cblack3
+    background-color: transparent
 
-    &:focus
-      border-color: $cblue
+.is-fetching
+  pointer-events: none
 
-    &:disabled
-      color: $cblack3
-      border-color: $cblack3
-      background-color: transparent
+  .loader
+    display: block
+
+  .children
+    visibility: hidden

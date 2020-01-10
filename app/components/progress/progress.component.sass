@@ -1,0 +1,24 @@
+.container
+  position: relative
+
+.progress
+  height: 4px
+  background-color: $cblue
+  transition-property: width, background-color
+  transition-duration: .3s
+
+.label
+  position: absolute
+  top: 100%
+  right: 16px
+  font-size: 9px
+
+.is-done
+  &.container
+    transition-property: opacity
+    transition-duration: .3s
+    transition-delay: 4s
+    opacity: 0
+
+  & .progress
+    background-color: $cgreen
