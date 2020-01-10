@@ -1,4 +1,5 @@
 import React from 'react';
+import cn from 'classnames';
 import {connect} from 'helpers/connect';
 import {RootController} from 'rootController';
 import {BoardsComponent} from 'modules/boards';
@@ -33,7 +34,7 @@ export class SettingsComponent extends React.Component {
     } = this.rootController;
     if (boardsFetching) return <Loader/>;
     return (
-      <>
+      <div className={cn(styles.container, {[styles['is-sync']]: syncFetching})}>
         <Progress
           done={doneStagesAmount}
           total={totalSyncStages}
@@ -60,7 +61,7 @@ export class SettingsComponent extends React.Component {
         </div>
         <div className={styles.btns}>
           {isCancelableStage &&
-            <Button className={styles.btn} onClick={cancelSync}>
+            <Button className={cn(styles.btn, styles.cancel)} onClick={cancelSync}>
               Cancel
             </Button>
           }
@@ -74,7 +75,7 @@ export class SettingsComponent extends React.Component {
             Sync
           </Button>
         </div>
-      </>
+      </div>
     );
   }
 
