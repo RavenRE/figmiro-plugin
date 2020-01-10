@@ -13,7 +13,8 @@ import {
   Widgets,
   ArtboardsCache,
   Picture,
-  SyncProgressStage
+  SyncProgressStage,
+  PicturesBlobed
 } from './settings.entity';
 import {
   ProcessSyncArtboardsDTO,
@@ -25,6 +26,7 @@ export function getProgressStages(): SyncProgressStage[] {
   return Object.values(SyncProgressStage);
 }
 
+const EXTENSION = 'PNG';
 const IMAGES_EXPORTED = 'IMAGES_EXPORTED';
 export async function processSyncArtboards(
   figma: PluginAPI,
@@ -54,14 +56,14 @@ export async function processSyncArtboards(
   const images = await Promise.all(frames.map(async (frame): Promise<Picture> => ({
     id: frame.id,
     name: frame.name,
-    image: await frame.exportAsync({format: 'PNG'}),
+    image: await frame.exportAsync({format: EXTENSION}),
     x: frame.x,
     y: frame.y
   })));
   figma.ui.postMessage({type: IMAGES_EXPORTED, value: images});
 }
 
-export async function getImages(dto: SyncArtboardsDTO): Promise<Pictures> {
+export async function getImages(dto: SyncArtboardsDTO): Promise<PicturesBlobed> {
   const cache = await getCache();
   return new Promise((resolve, reject) => {
     const onMessageEvent = async (event: MessageEvent) => {
@@ -70,8 +72,9 @@ export async function getImages(dto: SyncArtboardsDTO): Promise<Pictures> {
       const images = pluginMessage.value as Pictures;
       resolve(images.map(image => ({
         ...image,
-        ...((cache && cache[image.id]) ? {resourceId: cache[image.id]} : {})
-      })));
+        ...((cache && cache[image.id]) ? {resourceId: cache[image.id]} : {}),
+        image: new Blob([image.image], {type: `image/${EXTENSION.toLowerCase()}`})
+      })) as PicturesBlobed);
       window.removeEventListener(MESSAGE_EVENT, onMessageEvent);
     };
     try {
@@ -91,7 +94,22 @@ export async function createImagesInMiro(
   dto: CreateImagesInMiroDTO
 ): Promise<Widgets> {
   try {
-    const response = await request.post<Widgets>('/api/pictures', dto);
+    const data = new FormData();
+    _.chain(dto)
+      .omit('images')
+      .forEach((value, key) => {
+        data.append(key, `${value}`);
+      })
+      .value();
+    dto.images.forEach(image => {
+      data.append('image', image.image, `${image.name}.${EXTENSION.toLowerCase()}`);
+      data.append('imageMeta', JSON.stringify(_.omit(image, 'image')));
+    });
+    const response = await request.post<Widgets>('/api/pictures', data, {
+      headers: {
+        'content-type': 'multipart/form-data'
+      }
+    });
     return response.data;
   } catch (error) {
     throw new AppError(error.response.data.reason);
