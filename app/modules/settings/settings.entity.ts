@@ -5,16 +5,19 @@ export enum SyncProgressStage {
 }
 
 export type Pictures = Picture[];
-export class Picture {
-  constructor(
-    readonly id: string,
-    readonly image: Uint8Array,
-    readonly x: number,
-    readonly y: number,
-    readonly name: string,
-    readonly resourceId?: string
-  ) {}
-}
+export type Picture = {
+  readonly id: string;
+  readonly image: Uint8Array;
+  readonly x: number;
+  readonly y: number;
+  readonly name: string;
+  readonly resourceId?: string;
+};
+
+export type PicturesBlobed = PictureBlobed[];
+export type PictureBlobed = Picture & {
+  readonly image: Blob;
+};
 
 export type Widgets = Widget[];
 export class Widget {
