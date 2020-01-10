@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import {AppError} from 'utils/AppError';
-import {request} from 'helpers/request';
+import {request, CancelToken, Canceler} from 'helpers/request';
 import {
   getValueFromStorage,
   setValueInStorage,
@@ -66,7 +66,7 @@ export async function processSyncArtboards(
 export async function getImages(dto: SyncArtboardsDTO): Promise<PicturesBlobed> {
   const cache = await getCache();
   return new Promise((resolve, reject) => {
-    const onMessageEvent = async (event: MessageEvent) => {
+    const onMessageEvent = (event: MessageEvent) => {
       const {pluginMessage} = event.data;
       if (pluginMessage.type !== IMAGES_EXPORTED) return;
       const images = pluginMessage.value as Pictures;
@@ -90,6 +90,7 @@ export async function getImages(dto: SyncArtboardsDTO): Promise<PicturesBlobed> 
   });
 }
 
+export let cancelCreateImagesInMiro: Canceler | undefined;
 export async function createImagesInMiro(
   dto: CreateImagesInMiroDTO
 ): Promise<Widgets> {
@@ -106,9 +107,10 @@ export async function createImagesInMiro(
       data.append('imageMeta', JSON.stringify(_.omit(image, 'image')));
     });
     const response = await request.post<Widgets>('/api/pictures', data, {
-      headers: {
-        'content-type': 'multipart/form-data'
-      }
+      headers: {'content-type': 'multipart/form-data'},
+      cancelToken: new CancelToken(c => {
+        cancelCreateImagesInMiro = c;
+      })
     });
     return response.data;
   } catch (error) {

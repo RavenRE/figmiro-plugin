@@ -2,8 +2,11 @@ import axios from 'axios';
 import {getTokenFromStorage} from 'modules/auth/auth.service';
 
 export const request = axios.create({
-  baseURL: 'https://410e6d18.ngrok.io'
+  baseURL: 'https://21ffc68f.ngrok.io'
 });
+
+export const {CancelToken} = axios;
+export {Canceler} from 'axios';
 
 request.interceptors.request.use(async config => {
   const token = await getTokenFromStorage();

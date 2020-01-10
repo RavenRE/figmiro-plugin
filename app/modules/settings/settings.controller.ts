@@ -1,7 +1,14 @@
 import {action, computed, observable} from 'mobx';
 import {RootController} from 'rootController';
 import {IController} from 'utils/Controller';
-import {clearCache, createImagesInMiro, getImages, getProgressStages, updateCache} from './settings.service';
+import {
+  cancelCreateImagesInMiro,
+  clearCache,
+  createImagesInMiro,
+  getImages,
+  getProgressStages,
+  updateCache
+} from './settings.service';
 import {SyncProgressStage} from './settings.entity';
 
 export class SettingsController implements IController {
@@ -51,6 +58,16 @@ export class SettingsController implements IController {
     }
   }
 
+  cancelSync = (): void => {
+    if (
+      !this.currentSyncStage ||
+      !cancelCreateImagesInMiro
+    ) return;
+    if (this.currentSyncStage === SyncProgressStage.IMAGE_SENDING_TO_MIRO) {
+      cancelCreateImagesInMiro();
+    }
+  };
+
   @computed get doneStagesAmount(): number {
     return this.doneSyncStages.length;
   }
@@ -58,6 +75,13 @@ export class SettingsController implements IController {
   @computed get currentSyncStage(): SyncProgressStage | undefined {
     if (!this.doneSyncStages.length || !this.fetching) return;
     return this.doneSyncStages[0];
+  }
+
+  @computed get isCancelableStage(): boolean {
+    const cancelableStages = [
+      SyncProgressStage.IMAGE_SENDING_TO_MIRO
+    ];
+    return !!this.currentSyncStage && cancelableStages.includes(this.currentSyncStage);
   }
 
   @action.bound reset() {

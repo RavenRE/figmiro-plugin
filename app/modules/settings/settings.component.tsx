@@ -4,8 +4,8 @@ import {RootController} from 'rootController';
 import {BoardsComponent} from 'modules/boards';
 import {SettingsSelectionComponent} from 'modules/settings-selection';
 import {SettingsAdditionsComponent} from 'modules/settings-additions';
-import {Button, ButtonMode} from 'components/button';
 import {Icon, IconName} from 'modules/icons';
+import {Button, ButtonMode} from 'components/button';
 import {Loader} from 'components/loader';
 import {Progress} from 'components/progress';
 import {SyncProgressStage} from './settings.entity';
@@ -18,7 +18,8 @@ export class SettingsComponent extends React.Component {
       authController: {logout},
       settingsController: {
         sync,
-        reset,
+        cancelSync,
+        isCancelableStage,
         fetching: syncFetching,
         totalSyncStages,
         doneStagesAmount,
@@ -58,9 +59,11 @@ export class SettingsComponent extends React.Component {
           <SettingsAdditionsComponent/>
         </div>
         <div className={styles.btns}>
-          <Button className={styles.btn} onClick={reset}>
-            Cancel
-          </Button>
+          {isCancelableStage &&
+            <Button className={styles.btn} onClick={cancelSync}>
+              Cancel
+            </Button>
+          }
           <Button
             className={styles.btn}
             mode={ButtonMode.PRIMARY}
