@@ -22,7 +22,8 @@ export class SettingsComponent extends React.Component {
         fetching: syncFetching,
         totalSyncStages,
         doneStagesAmount,
-        currentSyncStage
+        currentSyncStage,
+        resetDoneSyncStages
       },
       boardsController: {
         fetching: boardsFetching,
@@ -37,6 +38,7 @@ export class SettingsComponent extends React.Component {
           total={totalSyncStages}
           label={mapSyncStageToProgressLabel(currentSyncStage)}
           doneLabel={DONE_LABEL}
+          reset={resetDoneSyncStages}
           className={styles.progress}
         />
         <div className={styles.intro}>
@@ -87,6 +89,7 @@ export class SettingsComponent extends React.Component {
 const mapSyncStageToProgressLabel = (stage?: SyncProgressStage): string | undefined => {
   if (!stage) return;
   const mapper = {
+    [SyncProgressStage.INITIAL]: '',
     [SyncProgressStage.IMAGES_EXPORTING]: 'Exporting artboards...',
     [SyncProgressStage.IMAGE_SENDING_TO_MIRO]: 'Sending images to Miro...',
     [SyncProgressStage.CACHE_UPDATING]: 'Updating cache...'

@@ -24,6 +24,7 @@ export class SettingsController implements IController {
       } = this.rootController;
       if (!selectedBoard) return;
 
+      this.goToSyncStage(SyncProgressStage.INITIAL);
       this.goToSyncStage(SyncProgressStage.IMAGES_EXPORTING);
       const images = await getImages({
         boardId: selectedBoard.id,
@@ -76,10 +77,11 @@ export class SettingsController implements IController {
   }
 
   @action.bound private goToSyncStage(stage: SyncProgressStage): void {
+    if (this.doneSyncStages.includes(stage)) return;
     this.doneSyncStages = [stage, ...this.doneSyncStages];
   }
 
-  @action.bound private resetDoneSyncStages(): void {
+  @action.bound resetDoneSyncStages(): void {
     this.doneSyncStages = [];
   }
 }

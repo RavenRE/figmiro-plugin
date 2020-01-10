@@ -1,13 +1,14 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import cn from 'classNames';
 import {WithClassName} from 'utils/WithClassName';
 import styles from './progress.component.sass';
 
 type Props = {
-  done: number,
-  total: number,
-  label?: string,
-  doneLabel?: string
+  done: number;
+  total: number;
+  label?: string;
+  doneLabel?: string;
+  reset(): void;
 } & WithClassName;
 
 export const Progress: React.FC<Props> = ({
@@ -15,10 +16,19 @@ export const Progress: React.FC<Props> = ({
   done,
   label,
   doneLabel,
-  className
+  className,
+  reset
 }) => {
-  if (!total) return null;
+  if (!total || !done) return null;
   const isDone = total === done;
+  useEffect(
+    () => {
+      if (isDone) {
+        setTimeout(reset, 4000);
+      }
+    },
+    [isDone]
+  );
   return (
     <div className={cn(styles.container, className, {[styles['is-done']]: isDone})}>
       <div
