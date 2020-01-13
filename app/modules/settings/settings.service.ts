@@ -21,6 +21,7 @@ import {
   CreateImagesInMiroDTO,
   SyncArtboardsDTO
 } from './settings.dto';
+import {SyncErrorType} from './settings.errors';
 
 export function getProgressStages(): SyncProgressStage[] {
   return Object.values(SyncProgressStage);
@@ -52,7 +53,13 @@ export async function processSyncArtboards(
     frames = figma.currentPage.selection;
   }
 
-  if (!frames) return;
+  if (!frames || !frames.length) {
+    const typeMapper = {
+      [SettingsSelectionType.SELECTED]: SyncErrorType.NO_ARTBOARDS_SELECTED,
+      [SettingsSelectionType.ALL]: SyncErrorType.NO_ARTBOARDS_AT_CANVAS
+    };
+    return figma.ui.postMessage({type: typeMapper[msg.type]});
+  }
   const images = await Promise.all(frames.map(async (frame): Promise<Picture> => ({
     id: frame.id,
     name: frame.name,
@@ -68,14 +75,21 @@ export async function getImages(dto: SyncArtboardsDTO): Promise<PicturesBlobed> 
   return new Promise((resolve, reject) => {
     const onMessageEvent = (event: MessageEvent) => {
       const {pluginMessage} = event.data;
-      if (pluginMessage.type !== IMAGES_EXPORTED) return;
-      const images = pluginMessage.value as Pictures;
-      resolve(images.map(image => ({
-        ...image,
-        ...((cache && cache[image.id]) ? {resourceId: cache[image.id]} : {}),
-        image: new Blob([image.image], {type: `image/${EXTENSION.toLowerCase()}`})
-      })) as PicturesBlobed);
-      window.removeEventListener(MESSAGE_EVENT, onMessageEvent);
+      if (
+        pluginMessage.type === SyncErrorType.NO_ARTBOARDS_SELECTED
+        || pluginMessage.type === SyncErrorType.NO_ARTBOARDS_AT_CANVAS
+      ) {
+        reject(new AppError(pluginMessage.type));
+      }
+      if (pluginMessage.type === IMAGES_EXPORTED) {
+        const images = pluginMessage.value as Pictures;
+        resolve(images.map(image => ({
+          ...image,
+          ...((cache && cache[image.id]) ? {resourceId: cache[image.id]} : {}),
+          image: new Blob([image.image], {type: `image/${EXTENSION.toLowerCase()}`})
+        })) as PicturesBlobed);
+        window.removeEventListener(MESSAGE_EVENT, onMessageEvent);
+      }
     };
     try {
       sendMessageToFigma({
@@ -94,28 +108,24 @@ export let cancelCreateImagesInMiro: Canceler | undefined;
 export async function createImagesInMiro(
   dto: CreateImagesInMiroDTO
 ): Promise<Widgets> {
-  try {
-    const data = new FormData();
-    _.chain(dto)
-      .omit('images')
-      .forEach((value, key) => {
-        data.append(key, `${value}`);
-      })
-      .value();
-    dto.images.forEach(image => {
-      data.append('image', image.image, `${image.name}.${EXTENSION.toLowerCase()}`);
-      data.append('imageMeta', JSON.stringify(_.omit(image, 'image')));
-    });
-    const response = await request.post<Widgets>('/api/pictures', data, {
-      headers: {'content-type': 'multipart/form-data'},
-      cancelToken: new CancelToken(c => {
-        cancelCreateImagesInMiro = c;
-      })
-    });
-    return response.data;
-  } catch (error) {
-    throw new AppError(error.response.data.reason);
-  }
+  const data = new FormData();
+  _.chain(dto)
+    .omit('images')
+    .forEach((value, key) => {
+      data.append(key, `${value}`);
+    })
+    .value();
+  dto.images.forEach(image => {
+    data.append('image', image.image, `${image.name}.${EXTENSION.toLowerCase()}`);
+    data.append('imageMeta', JSON.stringify(_.omit(image, 'image')));
+  });
+  const response = await request.post<Widgets>('/api/pictures', data, {
+    headers: {'content-type': 'multipart/form-data'},
+    cancelToken: new CancelToken(c => {
+      cancelCreateImagesInMiro = c;
+    })
+  });
+  return response.data;
 }
 
 const CACHE_KEY = 'cache';

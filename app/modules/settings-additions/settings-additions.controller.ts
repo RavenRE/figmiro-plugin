@@ -16,6 +16,7 @@ export class SettingsAdditionsController implements IController {
   ) {}
 
   @action.bound updateAdditions(type: SettingsAdditionsType): void {
+    this.rootController.settingsController.resetErrors();
     const alreadyHas = this.selected.includes(type);
     if (alreadyHas) {
       this.selected = this.selected.filter(t => t !== type);

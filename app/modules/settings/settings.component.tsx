@@ -1,6 +1,7 @@
 import React from 'react';
 import cn from 'classnames';
 import {connect} from 'helpers/connect';
+import {getErrorMessage} from 'helpers/getErrorMessage';
 import {RootController} from 'rootController';
 import {BoardsComponent} from 'modules/boards';
 import {SettingsSelectionComponent} from 'modules/settings-selection';
@@ -10,6 +11,7 @@ import {Button, ButtonMode} from 'components/button';
 import {Loader} from 'components/loader';
 import {Progress} from 'components/progress';
 import {SyncProgressStage} from './settings.entity';
+import {SyncErrorType} from './settings.errors';
 import styles from './settings.component.sass';
 
 @connect
@@ -24,7 +26,6 @@ export class SettingsComponent extends React.Component {
         fetching: syncFetching,
         totalSyncStages,
         doneStagesAmount,
-        currentSyncStage,
         resetDoneSyncStages
       },
       boardsController: {
@@ -36,10 +37,11 @@ export class SettingsComponent extends React.Component {
     return (
       <div className={cn(styles.container, {[styles['is-sync']]: syncFetching})}>
         <Progress
+          error={this.error}
           done={doneStagesAmount}
           total={totalSyncStages}
-          label={mapSyncStageToProgressLabel(currentSyncStage)}
-          doneLabel={DONE_LABEL}
+          label={this.progressLabel}
+          doneLabel="Sync Done!"
           reset={resetDoneSyncStages}
           className={styles.progress}
         />
@@ -85,19 +87,31 @@ export class SettingsComponent extends React.Component {
     ]);
   }
 
+  private get progressLabel(): string | undefined {
+    const {currentSyncStage: stage} = this.rootController.settingsController;
+    if (!stage) return;
+    const mapper = {
+      [SyncProgressStage.INITIAL]: '',
+      [SyncProgressStage.IMAGES_EXPORTING]: 'Exporting artboards...',
+      [SyncProgressStage.IMAGE_SENDING_TO_MIRO]: 'Sending images to Miro...',
+      [SyncProgressStage.CACHE_UPDATING]: 'Updating cache...'
+    };
+    return mapper[stage];
+  }
+
+  private get error(): string | undefined {
+    const {error} = this.rootController.settingsController;
+    if (!error) return;
+    return getErrorMessage<SyncErrorType>(
+      {
+        [SyncErrorType.NO_ARTBOARDS_SELECTED]: 'There is no artboard selected.',
+        [SyncErrorType.NO_ARTBOARDS_AT_CANVAS]: 'There is no artboards at canvas.'
+      },
+      error
+    );
+  }
+
   private get rootController(): RootController {
-    return (this.props as RootController);
+    return (this.props as  RootController);
   }
 }
-
-const mapSyncStageToProgressLabel = (stage?: SyncProgressStage): string | undefined => {
-  if (!stage) return;
-  const mapper = {
-    [SyncProgressStage.INITIAL]: '',
-    [SyncProgressStage.IMAGES_EXPORTING]: 'Exporting artboards...',
-    [SyncProgressStage.IMAGE_SENDING_TO_MIRO]: 'Sending images to Miro...',
-    [SyncProgressStage.CACHE_UPDATING]: 'Updating cache...'
-  };
-  return mapper[stage];
-};
-const DONE_LABEL = 'Sync Done!';

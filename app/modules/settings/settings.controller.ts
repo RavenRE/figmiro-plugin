@@ -10,12 +10,13 @@ import {
   updateCache
 } from './settings.service';
 import {SyncProgressStage} from './settings.entity';
+import {SyncErrorType} from './settings.errors';
 
 export class SettingsController implements IController {
   totalSyncStages = getProgressStages().length;
   @observable doneSyncStages: SyncProgressStage[] = [];
   @observable fetching = false;
-  @observable error = '';
+  @observable error?: SyncErrorType;
 
   constructor(private readonly rootController: RootController) {}
 
@@ -23,6 +24,7 @@ export class SettingsController implements IController {
     try {
       this.fetching = true;
       this.resetDoneSyncStages();
+      this.resetErrors();
 
       const {
         boardsController: {selectedBoard},
@@ -50,8 +52,8 @@ export class SettingsController implements IController {
       this.goToSyncStage(SyncProgressStage.CACHE_UPDATING);
       await updateCache(widgets);
       if (needOpenMiroBoard) openBoardLink();
-    } catch (e) {
-      this.error = e;
+    } catch (error) {
+      this.error = error.status;
       this.resetDoneSyncStages();
     } finally {
       this.fetching = false;
@@ -98,6 +100,7 @@ export class SettingsController implements IController {
     settingsSelectionController.reset();
     clearCache();
     this.resetDoneSyncStages();
+    this.resetErrors();
   }
 
   @action.bound private goToSyncStage(stage: SyncProgressStage): void {
@@ -107,5 +110,9 @@ export class SettingsController implements IController {
 
   @action.bound resetDoneSyncStages(): void {
     this.doneSyncStages = [];
+  }
+
+  @action.bound resetErrors(): void {
+    this.error = undefined;
   }
 }
