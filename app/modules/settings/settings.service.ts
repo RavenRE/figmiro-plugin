@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import {AppError} from 'utils/AppError';
+import {AppError} from 'helpers/AppError';
 import {request, CancelToken, Canceler} from 'helpers/request';
 import {
   getValueFromStorage,

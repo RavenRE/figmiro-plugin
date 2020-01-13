@@ -1,8 +1,9 @@
-import axios from 'axios';
+import axios, {AxiosError} from 'axios';
 import {getTokenFromStorage} from 'modules/auth/auth.service';
+import {AppError, AppErrorType} from 'helpers/AppError';
 
 export const request = axios.create({
-  baseURL: 'https://21ffc68f.ngrok.io'
+  baseURL: 'https://cfb81bbe.ngrok.io'
 });
 
 export const {CancelToken} = axios;
@@ -18,3 +19,13 @@ request.interceptors.request.use(async config => {
   }
   return config;
 });
+
+request.interceptors.response.use(
+  response => response,
+  (error: AxiosError) => {
+    if (!error.response) {
+      throw new AppError(AppErrorType.NETWORK_ERROR);
+    }
+    throw new AppError(error.response.data.reason);
+  }
+);

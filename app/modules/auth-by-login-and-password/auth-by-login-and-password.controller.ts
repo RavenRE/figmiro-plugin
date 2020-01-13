@@ -1,7 +1,7 @@
 import {observable, action} from 'mobx';
 import {IController} from 'utils/Controller';
 import {isEmail} from 'utils/isEmail';
-import {AppError} from 'utils/AppError';
+import {AppError} from 'helpers/AppError';
 import {RootController} from 'rootController';
 import {AuthByLoginAndPasswordErrorType} from './auth-by-login-and-password.errors';
 import {AuthByLoginAndPasswordDto} from './auth-by-login-and-password.dto';
@@ -28,11 +28,7 @@ export class AuthByLoginAndPasswordController implements IController {
       this.rootController.authController.setToken(token);
       this.reset();
     } catch (error) {
-      if (error.status) {
-        this.error = error.status;
-        return;
-      }
-      this.error = AuthByLoginAndPasswordErrorType.NETWORK_ERROR;
+      this.error = error.status;
     } finally {
       this.fetching = false;
     }

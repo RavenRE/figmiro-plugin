@@ -1,5 +1,6 @@
 import React from 'react';
 import {connect} from 'helpers/connect';
+import {getError} from 'helpers/getError';
 import {RootController} from 'rootController';
 import {Input} from 'components/input';
 import {Button, ButtonMode} from 'components/button';
@@ -61,17 +62,17 @@ export class AuthByLoginAndPasswordComponent extends React.Component {
   private get error(): string | undefined {
     const {error} = this.controller;
     if (!error) return;
-    const errorMapper = {
-      [AuthByLoginAndPasswordErrorType.EMAIL_EMPTY]: 'Email field is empty.',
-      [AuthByLoginAndPasswordErrorType.PASSWORD_EMPTY]: 'Password field is empty.',
-      [AuthByLoginAndPasswordErrorType.EMAIL_IS_NOT_CORRECT]: 'Email is not correct.',
-      [AuthByLoginAndPasswordErrorType.AUTHORIZATION_FAILED]:
-        'Authorization Failed. Please, check your email and password.',
-      [AuthByLoginAndPasswordErrorType.SERVER_ERROR]: 'Server error.',
-      [AuthByLoginAndPasswordErrorType.NETWORK_ERROR]: 'Network error. Please, check connection.',
-      [AuthByLoginAndPasswordErrorType.PASSWORD_NOT_SET]: 'Password in user profile not set.'
-    };
-    return errorMapper[error];
+    return getError<AuthByLoginAndPasswordErrorType>(
+      {
+        [AuthByLoginAndPasswordErrorType.EMAIL_EMPTY]: 'Email field is empty.',
+        [AuthByLoginAndPasswordErrorType.PASSWORD_EMPTY]: 'Password field is empty.',
+        [AuthByLoginAndPasswordErrorType.EMAIL_IS_NOT_CORRECT]: 'Email is not correct.',
+        [AuthByLoginAndPasswordErrorType.AUTHORIZATION_FAILED]:
+          'Authorization Failed. Please, check your email and password.',
+        [AuthByLoginAndPasswordErrorType.PASSWORD_NOT_SET]: 'Password in user profile not set.'
+      },
+      error
+    );
   }
 
   private get controller() {
