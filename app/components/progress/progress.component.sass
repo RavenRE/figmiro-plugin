@@ -7,11 +7,18 @@
   transition-property: width, background-color
   transition-duration: .3s
 
+.error,
 .label
   position: absolute
   top: 100%
   right: 16px
   font-size: 9px
 
+.error
+  color: $cred
+
 .is-done .progress
   background-color: $cgreen
+
+.is-error .progress
+  background-color: $cred

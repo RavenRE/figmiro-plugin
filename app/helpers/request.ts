@@ -3,7 +3,7 @@ import {getTokenFromStorage} from 'modules/auth/auth.service';
 import {AppError, AppErrorType} from 'helpers/AppError';
 
 export const request = axios.create({
-  baseURL: 'https://cfb81bbe.ngrok.io'
+  baseURL: 'https://15558def.ngrok.io'
 });
 
 export const {CancelToken} = axios;
