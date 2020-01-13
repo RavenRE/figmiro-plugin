@@ -1,6 +1,6 @@
 import {AppErrorType} from 'helpers/AppError';
 
-export function getError<DomainSpecificError extends string>(
+export function getErrorMessage<DomainSpecificError extends string>(
   domainSpecificMapper: {[key: string]: string},
   error: AppErrorType | DomainSpecificError
 ): string {

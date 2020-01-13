@@ -10,16 +10,12 @@ import styles from './main.component.sass';
 export class MainComponent extends React.Component {
   render(): React.ReactNode {
     const {
-      authController: {
-        isAuth,
-        checkingToken
-      },
-      iconsController: {fetching: fetchingIcons}
+      authController: {isAuth},
+      mainController: {fetching}
     } = this.rootController;
-    const isFetching = checkingToken || fetchingIcons;
     return (
       <div className={styles.container}>
-        {isFetching ?
+        {fetching ?
           <Loader/> :
         isAuth ?
           <SettingsComponent/> :
@@ -30,10 +26,7 @@ export class MainComponent extends React.Component {
   }
 
   async componentDidMount() {
-    await Promise.all([
-      this.rootController.authController.checkToken(),
-      this.rootController.iconsController.fetchIcons()
-    ]);
+    await this.rootController.mainController.initialFetch();
   }
 
   private get rootController(): RootController {

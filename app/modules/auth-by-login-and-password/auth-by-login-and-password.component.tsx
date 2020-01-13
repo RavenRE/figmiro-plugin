@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'helpers/connect';
-import {getError} from 'helpers/getError';
+import {getErrorMessage} from 'helpers/getErrorMessage';
 import {RootController} from 'rootController';
 import {Input} from 'components/input';
 import {Button, ButtonMode} from 'components/button';
@@ -62,7 +62,7 @@ export class AuthByLoginAndPasswordComponent extends React.Component {
   private get error(): string | undefined {
     const {error} = this.controller;
     if (!error) return;
-    return getError<AuthByLoginAndPasswordErrorType>(
+    return getErrorMessage<AuthByLoginAndPasswordErrorType>(
       {
         [AuthByLoginAndPasswordErrorType.EMAIL_EMPTY]: 'Email field is empty.',
         [AuthByLoginAndPasswordErrorType.PASSWORD_EMPTY]: 'Password field is empty.',
