@@ -2,7 +2,8 @@ export enum IconName {
   LOGOUT = 'logout',
   CHECKED = 'checked',
   UNCHECKED = 'unchecked',
-  ARROW = 'arrow'
+  ARROW = 'arrow',
+  COVER = 'cover'
 }
 
 export type IconNames = IconName[];

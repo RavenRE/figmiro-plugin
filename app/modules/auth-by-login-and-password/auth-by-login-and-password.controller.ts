@@ -1,4 +1,4 @@
-import {observable, action} from 'mobx';
+import {observable, action, computed} from 'mobx';
 import {IController} from 'utils/Controller';
 import {isEmail} from 'utils/isEmail';
 import {AppError} from 'helpers/AppError';
@@ -14,6 +14,7 @@ export class AuthByLoginAndPasswordController implements IController {
   };
   @observable fetching = false;
   @observable error?: AuthByLoginAndPasswordErrorType;
+  @observable isEmailError = false;
 
   constructor(
     private readonly rootController: RootController
@@ -50,19 +51,25 @@ export class AuthByLoginAndPasswordController implements IController {
     this.resetErrors();
   }
 
-  private validate(): void | never {
-    const isEmailEmpty = !this.credentials.email;
-    if (isEmailEmpty) throw new AppError(AuthByLoginAndPasswordErrorType.EMAIL_EMPTY);
-
-    const isPasswordEmpty = !this.credentials.password;
-    if (isPasswordEmpty) throw new AppError(AuthByLoginAndPasswordErrorType.PASSWORD_EMPTY);
-
+  @action.bound validate(): void | never {
     const isWrongEmail = !isEmail(this.credentials.email);
-    if (isWrongEmail) throw new AppError(AuthByLoginAndPasswordErrorType.EMAIL_IS_NOT_CORRECT);
+    if (isWrongEmail) {
+      this.isEmailError = true;
+      throw new AppError(AuthByLoginAndPasswordErrorType.EMAIL_IS_NOT_CORRECT);
+    }
   }
 
   @action.bound private resetErrors(): void {
+    this.isEmailError = false;
     this.error = undefined;
     this.fetching = false;
+  }
+
+  @computed get isLoginDisabled(): boolean {
+    return (
+      !!this.error ||
+      !this.credentials.email ||
+      !this.credentials.password
+    );
   }
 }

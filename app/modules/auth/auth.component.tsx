@@ -1,16 +1,12 @@
 import React from 'react';
+import {Layout} from 'components/layout';
 import {AuthByLoginAndPasswordComponent} from 'modules/auth-by-login-and-password';
 import styles from './auth.component.sass';
 
-export class AuthComponent extends React.Component {
-  render(): React.ReactNode {
-    return (
-      <div>
-        <h1 className={styles.title}>
-          Miro Sign In
-        </h1>
-        <AuthByLoginAndPasswordComponent/>
-      </div>
-    );
-  }
-}
+export const AuthComponent: React.FC = () =>
+  <Layout>
+    <h1 className={styles.title}>
+      Log into Miro
+    </h1>
+    <AuthByLoginAndPasswordComponent/>
+  </Layout>;

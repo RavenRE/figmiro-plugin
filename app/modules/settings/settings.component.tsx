@@ -10,6 +10,7 @@ import {Icon, IconName} from 'modules/icons';
 import {Button, ButtonMode} from 'components/button';
 import {Loader} from 'components/loader';
 import {Progress} from 'components/progress';
+import {Layout} from 'components/layout';
 import {SyncProgressStage} from './settings.entity';
 import {SyncErrorType} from './settings.errors';
 import styles from './settings.component.sass';
@@ -35,7 +36,7 @@ export class SettingsComponent extends React.Component {
     } = this.rootController;
     if (boardsFetching) return <Loader/>;
     return (
-      <div className={cn(styles.container, {[styles['is-sync']]: syncFetching})}>
+      <Layout className={cn(styles.container, {[styles['is-sync']]: syncFetching})}>
         <Progress
           error={this.error}
           done={doneStagesAmount}
@@ -47,7 +48,7 @@ export class SettingsComponent extends React.Component {
         />
         <div className={styles.intro}>
           <div className={styles.title}>
-            Settings
+            Sync artboards with Miro
           </div>
           <div
             className={styles['logout-icon']}
@@ -77,7 +78,7 @@ export class SettingsComponent extends React.Component {
             Sync
           </Button>
         </div>
-      </div>
+      </Layout>
     );
   }
 
@@ -104,8 +105,8 @@ export class SettingsComponent extends React.Component {
     if (!error) return;
     return getErrorMessage<SyncErrorType>(
       {
-        [SyncErrorType.NO_ARTBOARDS_SELECTED]: 'There is no artboard selected.',
-        [SyncErrorType.NO_ARTBOARDS_AT_CANVAS]: 'There is no artboards at canvas.'
+        [SyncErrorType.NO_ARTBOARDS_SELECTED]: 'There is no artboard selected',
+        [SyncErrorType.NO_ARTBOARDS_AT_CANVAS]: 'There is no artboards at canvas'
       },
       error
     );

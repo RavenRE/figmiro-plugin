@@ -4,20 +4,23 @@ import {WithClassName} from 'utils/WithClassName';
 import styles from './input.component.sass';
 
 type Props =
-  Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> &
-  WithClassName & {
+  Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'>
+  & WithClassName
+  & {
+    isError?: boolean;
     onChange(value: string): void
   };
 export class Input extends React.Component<Props> {
   render(): React.ReactNode {
     const {
       className,
+      isError,
       ...props
     } = this.props;
     return (
       <input
         {...props}
-        className={cn(className, styles.container)}
+        className={cn(className, styles.container, {[styles['is-error']]: isError})}
         onChange={this.onChange}
       />
     );
