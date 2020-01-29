@@ -1,4 +1,5 @@
 import React from 'react';
+import cn from 'classnames';
 import {WithClassName} from 'utils/WithClassName';
 import {Icon, IconName} from 'modules/icons';
 import styles from './layout.component.sass';
@@ -9,7 +10,7 @@ export const Layout: React.FC<Props> = ({
   children,
   className
 }) =>
-  <div className={className}>
+  <div className={cn(styles.container, className)}>
     <Icon
       name={IconName.COVER}
       className={styles.cover}

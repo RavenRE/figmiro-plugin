@@ -1,19 +1,22 @@
 import React from 'react';
 import cn from 'classnames';
 import {connect} from 'helpers/connect';
+import {resize} from 'helpers/resize';
 import {getErrorMessage} from 'helpers/getErrorMessage';
 import {RootController} from 'rootController';
 import {BoardsComponent} from 'modules/boards';
 import {SettingsSelectionComponent} from 'modules/settings-selection';
 import {SettingsAdditionsComponent} from 'modules/settings-additions';
-import {Icon, IconName} from 'modules/icons';
 import {Button, ButtonMode} from 'components/button';
+import {Highlighted} from 'components/highlighted';
 import {Loader} from 'components/loader';
 import {Progress} from 'components/progress';
 import {Layout} from 'components/layout';
 import {SyncProgressStage} from './settings.entity';
 import {SyncErrorType} from './settings.errors';
 import styles from './settings.component.sass';
+
+const INITIAL_SIZE = 376;
 
 @connect
 export class SettingsComponent extends React.Component {
@@ -22,8 +25,6 @@ export class SettingsComponent extends React.Component {
       authController: {logout},
       settingsController: {
         sync,
-        cancelSync,
-        isCancelableStage,
         fetching: syncFetching,
         totalSyncStages,
         doneStagesAmount,
@@ -46,43 +47,32 @@ export class SettingsComponent extends React.Component {
           reset={resetDoneSyncStages}
           className={styles.progress}
         />
-        <div className={styles.intro}>
-          <div className={styles.title}>
-            Sync artboards with Miro
-          </div>
-          <div
-            className={styles['logout-icon']}
-            onClick={logout}
-          >
-            <Icon name={IconName.LOGOUT}/>
-          </div>
+        <div className={styles.title}>
+          Sync artboards with Miro
         </div>
         <BoardsComponent/>
         <div className={styles.wrap}>
           <SettingsSelectionComponent className={styles['settings-item']}/>
           <SettingsAdditionsComponent/>
         </div>
-        <div className={styles.btns}>
-          {isCancelableStage &&
-            <Button className={cn(styles.btn, styles.cancel)} onClick={cancelSync}>
-              Cancel
-            </Button>
-          }
-          <Button
-            className={styles.btn}
-            mode={ButtonMode.PRIMARY}
-            disabled={!selectedBoard}
-            onClick={sync}
-            fetching={syncFetching}
-          >
-            Sync
-          </Button>
+        <Button
+          className={styles.btn}
+          mode={ButtonMode.PRIMARY}
+          disabled={!selectedBoard}
+          onClick={sync}
+          fetching={syncFetching}
+        >
+          Sync
+        </Button>
+        <div className={styles.mention}>
+          Want to use a different account? <Highlighted onClick={logout}>Log out</Highlighted>
         </div>
       </Layout>
     );
   }
 
-  async componentDidMount() {
+  async componentDidMount(): Promise<void> {
+    resize({height: INITIAL_SIZE});
     await Promise.all([
       this.rootController.boardsController.fetchBoards()
     ]);
@@ -95,6 +85,7 @@ export class SettingsComponent extends React.Component {
       [SyncProgressStage.INITIAL]: '',
       [SyncProgressStage.IMAGES_EXPORTING]: 'Exporting artboards...',
       [SyncProgressStage.IMAGE_SENDING_TO_MIRO]: 'Sending images to Miro...',
+      [SyncProgressStage.LONG_PROCESSING]: 'The process may take some time...',
       [SyncProgressStage.CACHE_UPDATING]: 'Updating cache...'
     };
     return mapper[stage];
@@ -106,7 +97,7 @@ export class SettingsComponent extends React.Component {
     return getErrorMessage<SyncErrorType>(
       {
         [SyncErrorType.NO_ARTBOARDS_SELECTED]: 'There is no artboard selected',
-        [SyncErrorType.NO_ARTBOARDS_AT_CANVAS]: 'There is no artboards at canvas'
+        [SyncErrorType.NO_ARTBOARDS_AT_CANVAS]: 'There are no artboards at canvas'
       },
       error
     );

@@ -41,6 +41,9 @@ export class SettingsController implements IController {
       });
 
       this.goToSyncStage(SyncProgressStage.IMAGE_SENDING_TO_MIRO);
+      const timer = setTimeout(() => {
+        this.goToSyncStage(SyncProgressStage.LONG_PROCESSING);
+      }, 6000);
       const widgets = await createImagesInMiro(
         {
           boardId: selectedBoard.id,
@@ -48,7 +51,8 @@ export class SettingsController implements IController {
           scale: needScale
         }
       );
-
+      clearTimeout(timer);
+      this.goToSyncStage(SyncProgressStage.LONG_PROCESSING);
       this.goToSyncStage(SyncProgressStage.CACHE_UPDATING);
       await updateCache(widgets);
       if (needOpenMiroBoard) openBoardLink();

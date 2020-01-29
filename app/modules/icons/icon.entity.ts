@@ -1,5 +1,4 @@
 export enum IconName {
-  LOGOUT = 'logout',
   CHECKED = 'checked',
   UNCHECKED = 'unchecked',
   ARROW = 'arrow',
