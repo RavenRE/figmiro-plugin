@@ -1,10 +1,16 @@
 import 'babel-polyfill';
-import {receiveStateValueFromStorage} from 'modules/auth/auth.service';
-import {processSyncAll} from 'modules/settings/settings.service';
+import {
+  processGetValueFromStorage,
+  processSetValueInStorage
+} from 'helpers/storage';
+import {processSyncArtboards} from 'modules/settings/settings.service';
+import {processResizing} from 'helpers/resize';
 
-figma.showUI(__html__);
+figma.showUI(__html__, {width: 320, height: 352});
 
 figma.ui.onmessage = async msg => {
-  await receiveStateValueFromStorage(figma, msg);
-  await processSyncAll(figma, msg);
+  processResizing(figma, msg);
+  await processGetValueFromStorage(figma, msg);
+  await processSetValueInStorage(figma, msg);
+  await processSyncArtboards(figma, msg);
 };

@@ -1,0 +1,46 @@
+// sass-lint:disable no-important class-name-format
+
+\:global
+  .dropdown
+    &__control,
+    &__menu
+      border-radius: 2px !important
+
+    &__control
+      border: 1px solid $cblack1 !important
+
+      &--is-focused
+        border-color: $cblue !important
+
+      &--menu-is-open
+        .dropdown__indicator
+          transform: rotate(180deg)
+
+    &__indicators
+      padding: 8px
+
+    &__indicator-separator
+      visibility: hidden
+
+    &__indicator
+      text-align: center
+      width: 10px
+      height: 6px
+      padding: 0 !important
+
+    &__menu
+      width: auto !important
+      left: 1px
+      right: 1px
+
+    &__menu-list
+      padding: 0 !important
+
+    &__option
+      background-color: transparent !important
+      color: $cblack !important
+
+      &--is-focused,
+      &--is-selected
+        color: $cblue !important
+

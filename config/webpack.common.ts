@@ -4,12 +4,11 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
 import {CleanWebpackPlugin} from 'clean-webpack-plugin';
 import { DefinePlugin } from 'webpack';
+import cssnano from 'cssnano';
 import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import {TsconfigPathsPlugin} from 'tsconfig-paths-webpack-plugin';
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 import autoprefixer from 'autoprefixer';
-import cssnano from 'cssnano';
 const {version} = require('../package.json');
 
 const dist = path.resolve('build');
@@ -50,7 +49,9 @@ module.exports = {
             ],
             plugins: [
               ['@babel/plugin-proposal-decorators', {legacy: true}],
-              ['@babel/plugin-proposal-class-properties', {loose: true}]
+              ['@babel/plugin-proposal-class-properties', {loose: true}],
+              ['@babel/plugin-proposal-optional-chaining'],
+              ['@babel/plugin-proposal-nullish-coalescing-operator']
             ].filter(Boolean)
           }
         }
@@ -58,7 +59,7 @@ module.exports = {
       {
         test: /\.sass$/,
         use: [
-          isProd ? MiniCssExtractPlugin.loader : 'style-loader',
+          'style-loader',
           {
             loader: 'css-loader',
             options: {
@@ -76,13 +77,13 @@ module.exports = {
                 autoprefixer(),
                 ...(isProd ? [cssnano(({preset: 'default'}))] : [])
               ],
-              sourceMap: !isProd
+              sourceMap: isDev
             }
           },
           {
             loader: 'sass-loader',
             options: {
-              sourceMap: !isProd,
+              sourceMap: isDev,
               data: '@import "mixins"; @import "vars";',
               includePaths: [path.resolve(src, 'uikit')]
             }
@@ -112,10 +113,6 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new MiniCssExtractPlugin({
-      filename: isProd ? '[name].[hash].css' : '[name].css',
-      chunkFilename: isProd ? '[id].[hash].css' : '[id].css'
-    }),
     new HtmlWebpackPlugin({
       template: path.join(src, 'index.html'),
       chunks: ['ui'],

@@ -1,19 +1,12 @@
 import React from 'react';
-import {connect} from 'utils/connect';
-import {InjectedProps, RootController} from 'rootController';
-import {ROOT_CONTROLLER_KEY} from 'modules/ROOT_CONTROLLER_KEY';
+import {Layout} from 'components/layout';
+import {AuthByLoginAndPasswordComponent} from 'modules/auth-by-login-and-password';
+import styles from './auth.component.sass';
 
-@connect()
-export class AuthComponent extends React.Component {
-  render(): React.ReactNode {
-    return (
-      <div>
-        Anuatorized
-      </div>
-    );
-  }
-
-  private get rootController(): RootController {
-    return (this.props as InjectedProps)[ROOT_CONTROLLER_KEY];
-  }
-}
+export const AuthComponent: React.FC = () =>
+  <Layout>
+    <h1 className={styles.title}>
+      Log into Miro
+    </h1>
+    <AuthByLoginAndPasswordComponent/>
+  </Layout>;

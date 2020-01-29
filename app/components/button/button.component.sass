@@ -1,0 +1,49 @@
+.container
+  position: relative
+  padding: 7px 16px
+  border: 1px solid transparent
+  border-radius: 6px
+
+  &:disabled
+    pointer-events: none
+
+.loader
+  display: none
+  position: absolute
+  margin: -.2em auto 0 -.3em
+  top: 50%
+  left: 50%
+  transform: translate(-50%, -50%)
+  font-size: 8px
+
+.primary
+  background-color: $cblue
+  color: $cwhite
+
+  &:focus
+    border-color: $cblueblack
+
+  &:disabled
+    background-color: $cblack3
+
+.secondary
+  border-color: $cblack
+  background-color: $cwhite
+  color: $cblack
+
+  &:focus
+    border-color: $cblue
+
+  &:disabled
+    color: $cblack3
+    border-color: $cblack3
+    background-color: transparent
+
+.is-fetching
+  pointer-events: none
+
+  .loader
+    display: block
+
+  .children
+    visibility: hidden

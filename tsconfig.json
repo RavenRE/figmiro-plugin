@@ -3,7 +3,7 @@
     "target": "es6",
     "module": "commonjs",
     "esModuleInterop": true,
-    "lib": ["dom", "es2015", "es2016"],
+    "lib": ["dom", "esnext"],
     "jsx": "react",
     "sourceMap": true,
     "moduleResolution": "node",
@@ -23,11 +23,12 @@
     "paths": {
       "components/*": ["components/*"],
       "utils/*": ["utils/*"],
-      "services/*": ["services/*"],
+      "helpers/*": ["helpers/*"],
       "transport/*": ["transport/*"],
       "pages/*": ["pages/*"],
       "modules/*": ["modules/*"],
-      "rootController": ["modules/rootController.ts"]
+      "rootController": ["modules/rootController.ts"],
+      "config": ["config.ts"]
     }
   }
 }

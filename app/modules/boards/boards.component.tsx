@@ -1,47 +1,44 @@
 import React from 'react';
-import {connect} from 'utils/connect';
-import {ROOT_CONTROLLER_KEY} from 'modules/ROOT_CONTROLLER_KEY';
-import {RootController, InjectedProps} from 'rootController';
+import {connect} from 'helpers/connect';
+import {RootController} from 'rootController';
+import {Boards, Board} from 'modules/boards';
+import {DDItems, DDItem, onDDChange, Dropdown} from 'components/dropdown';
 
-@connect()
+@connect
 export class BoardsComponent extends React.Component {
   render(): React.ReactNode {
     const {
-      boardsController: {
-        boards,
-        selectedBoardId,
-        selectBoard,
-        resetSelectedBoard
-      }
-    } = this.rootController;
-
+      boards,
+      selectedBoard,
+      selectBoard
+    } = this.controller;
     return (
-      <div>
-        <select>
-          <option
-            key="default"
-            value={void 0}
-            selected={!selectedBoardId}
-            onClick={resetSelectedBoard}
-          >Select board</option>
-          {boards.map(board =>
-            <option
-              key={board.id}
-              value={board.id}
-              selected={board.id === selectedBoardId}
-              onClick={() => selectBoard(board.id)}
-            >{board.title}</option>
-          )}
-        </select>
-      </div>
+      <Dropdown
+        options={mapBoardsToDDItems(boards)}
+        defaultValue={mapBoardToDDItem(selectedBoard)}
+        onChange={mapSelectBoardToDDOnChange(selectBoard)}
+        noOptionsMessage={noOptionsMessage}
+      />
     );
   }
 
-  async componentDidMount(): Promise<void> {
-    await this.rootController.boardsController.fetchBoards();
-  }
-
-  private get rootController(): RootController {
-    return (this.props as InjectedProps)[ROOT_CONTROLLER_KEY];
+  private get controller() {
+    return (this.props as RootController).boardsController;
   }
 }
+
+const PLACEHOLDER_BOARD: DDItem = {
+  value: 'PLACEHOLDER_BOARD',
+  label: 'Please, choose Miro\'s board'
+};
+const noOptionsMessage = () => 'No such board';
+const mapBoardsToDDItems = (boards: Boards): DDItems => boards.map(mapBoardToDDItem);
+const mapBoardToDDItem = (board?: Board): DDItem => board ? ({
+  value: board.id,
+  label: board.title
+}) : PLACEHOLDER_BOARD;
+const mapSelectBoardToDDOnChange =
+  (selectBoard: (id: string) => void): onDDChange =>
+  (option): void => {
+      selectBoard((option as DDItem).value);
+  };

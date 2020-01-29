@@ -1,0 +1,29 @@
+.container
+  display: flex
+  align-items: center
+  cursor: pointer
+
+.icon
+  $size: 12px
+  margin-right: 10px
+  width: $size
+  height: $size
+  display: flex
+  justify-content: center
+  align-items: center
+  border: 1px solid $cblack8
+  border-radius: 50%
+
+  &::before
+    content: ""
+    $size: 6
+    display: none
+    width: $size
+    height: $size
+    border-radius: 50%
+    background-color: $cblack8
+
+
+.is-active
+  .icon::before
+    display: block

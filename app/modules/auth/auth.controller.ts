@@ -1,30 +1,48 @@
-import {observable, action} from 'mobx';
+import {observable, action, computed} from 'mobx';
+import {IController} from 'utils/Controller';
 import {RootController} from 'rootController';
-import {getStateValue, checkIsAuth} from './auth.service';
+import {
+  removeTokenFromStorage,
+  createTokenInStorage,
+  getTokenFromStorage
+} from './auth.service';
 
-export class AuthController {
-  @observable stateValue?: string;
-  @observable error?: string;
-  @observable isAuth = false;
+export class AuthController implements IController {
+  @observable token?: string;
+  @observable checkingToken = false;
 
-  constructor(private readonly rootController: RootController) {}
+  constructor(
+    private readonly rootController: RootController
+  ) {}
 
-  @action.bound async fetchStateValue(): Promise<void> {
+  @action.bound async checkToken(): Promise<void> {
     try {
-      this.stateValue = await getStateValue();
-    } catch (error) {
-      this.error = '';
+      this.checkingToken = true;
+      this.token = await getTokenFromStorage();
+    } finally {
+      this.checkingToken = false;
     }
   }
 
-  @action.bound async fetchCheckAuth(): Promise<void> {
-    try {
-      if (this.stateValue) {
-        this.isAuth = await checkIsAuth(this.stateValue);
-      }
-    } catch (error) {
-      this.error = '';
-      throw this.error;
-    }
+  @action.bound setToken(token: string): void {
+    createTokenInStorage(token);
+    this.token = token;
+  }
+
+  @action.bound logout(): void {
+    removeTokenFromStorage();
+    Object.values(this.rootController)
+      .forEach(controller => {
+        controller.reset();
+      });
+  }
+
+  @action.bound reset(): void {
+    this.token = undefined;
+    this.checkingToken = false;
+  }
+
+  @computed get isAuth(): boolean {
+    return !!this.token;
   }
 }
