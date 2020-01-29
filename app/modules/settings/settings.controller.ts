@@ -107,16 +107,16 @@ export class SettingsController implements IController {
     this.resetErrors();
   }
 
-  @action.bound private goToSyncStage(stage: SyncProgressStage): void {
-    if (this.doneSyncStages.includes(stage)) return;
-    this.doneSyncStages = [stage, ...this.doneSyncStages];
-  }
-
   @action.bound resetDoneSyncStages(): void {
     this.doneSyncStages = [];
   }
 
   @action.bound resetErrors(): void {
     this.error = undefined;
+  }
+
+  @action.bound private goToSyncStage(stage: SyncProgressStage): void {
+    if (this.doneSyncStages.includes(stage)) return;
+    this.doneSyncStages = [stage, ...this.doneSyncStages];
   }
 }

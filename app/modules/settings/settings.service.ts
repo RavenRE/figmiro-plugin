@@ -58,7 +58,8 @@ export async function processSyncArtboards(
       [SettingsSelectionType.SELECTED]: SyncErrorType.NO_ARTBOARDS_SELECTED,
       [SettingsSelectionType.ALL]: SyncErrorType.NO_ARTBOARDS_AT_CANVAS
     };
-    return figma.ui.postMessage({type: typeMapper[msg.type]});
+    figma.ui.postMessage({type: typeMapper[msg.type]});
+    return;
   }
   const images = await Promise.all(frames.map(async (frame): Promise<Picture> => ({
     id: frame.id,

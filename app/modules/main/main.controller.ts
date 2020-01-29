@@ -13,8 +13,6 @@ export class MainController implements IController {
         this.rootController.authController.checkToken(),
         this.rootController.iconsController.fetchIcons()
       ]);
-    } catch (e) {
-      console.log(e);
     } finally {
       this.fetching = false;
     }
