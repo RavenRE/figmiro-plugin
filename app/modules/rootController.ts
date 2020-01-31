@@ -1,6 +1,5 @@
 import {IController} from 'utils/Controller';
 import {MainController} from 'modules/main';
-import {IconsController} from 'modules/icons';
 import {AuthController} from 'modules/auth';
 import {AuthByLoginAndPasswordController} from 'modules/auth-by-login-and-password';
 import {BoardsController} from 'modules/boards';
@@ -12,7 +11,6 @@ export class RootController {
   [key: string]: IController;
 
   mainController: MainController;
-  iconsController: IconsController;
   authController: AuthController;
   authByLoginAndPasswordController: AuthByLoginAndPasswordController;
   boardsController: BoardsController;
@@ -22,7 +20,6 @@ export class RootController {
 
   constructor() {
     this.mainController = new MainController(this);
-    this.iconsController = new IconsController();
 
     this.authController = new AuthController(this);
     this.authByLoginAndPasswordController = new AuthByLoginAndPasswordController(this);

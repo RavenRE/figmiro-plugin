@@ -3,7 +3,7 @@ import {getTokenFromStorage} from 'modules/auth/auth.service';
 import {AppError, AppErrorType} from 'helpers/AppError';
 
 export const request = axios.create({
-  baseURL: 'https://figma2miro.redmadrobot.com'
+  baseURL: 'https://0ddd8f64.ngrok.io'
 });
 
 export const {CancelToken} = axios;

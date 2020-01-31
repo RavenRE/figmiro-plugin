@@ -1,7 +1,9 @@
 import React from 'react';
 import cn from 'classnames';
 import {WithClassName} from 'utils/WithClassName';
-import {Icon, IconName} from 'modules/icons';
+import {Icon} from 'components/icon';
+import checkedIcon from './images/checked.svg';
+import uncheckedIcon from './images/unchecked.svg';
 import styles from './checkbox.component.sass';
 
 export type CheckboxBtn = {
@@ -28,7 +30,7 @@ export class Checkbox extends React.Component<Props> {
         onClick={this.onClick}
       >
         <Icon
-          name={this.iconName}
+          src={this.iconSrc}
           className={styles.icon}
         />
         <div>{value}</div>
@@ -44,8 +46,8 @@ export class Checkbox extends React.Component<Props> {
     onClick(id);
   };
 
-  private get iconName(): IconName {
-    return this.props.active ? IconName.CHECKED : IconName.UNCHECKED;
+  private get iconSrc(): string {
+    return this.props.active ? checkedIcon : uncheckedIcon;
   }
 
   private get className(): string {

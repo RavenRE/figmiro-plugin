@@ -14,6 +14,7 @@ import {SyncErrorType} from './settings.errors';
 
 export class SettingsController implements IController {
   totalSyncStages = getProgressStages().length;
+  timer?: NodeJS.Timeout;
   @observable doneSyncStages: SyncProgressStage[] = [];
   @observable fetching = false;
   @observable error?: SyncErrorType;
@@ -41,7 +42,7 @@ export class SettingsController implements IController {
       });
 
       this.goToSyncStage(SyncProgressStage.IMAGE_SENDING_TO_MIRO);
-      const timer = setTimeout(() => {
+      this.timer = setTimeout(() => {
         this.goToSyncStage(SyncProgressStage.LONG_PROCESSING);
       }, 6000);
       const widgets = await createImagesInMiro(
@@ -51,7 +52,7 @@ export class SettingsController implements IController {
           scale: needScale
         }
       );
-      clearTimeout(timer);
+      clearTimeout(this.timer);
       this.goToSyncStage(SyncProgressStage.LONG_PROCESSING);
       this.goToSyncStage(SyncProgressStage.CACHE_UPDATING);
       await updateCache(widgets);
@@ -108,6 +109,9 @@ export class SettingsController implements IController {
   }
 
   @action.bound resetDoneSyncStages(): void {
+    if (this.timer) {
+      clearTimeout(this.timer);
+    }
     this.doneSyncStages = [];
   }
 
