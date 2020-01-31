@@ -24,7 +24,7 @@ export const Progress: React.FC<Props> = ({
   const isContentHidden = !total || !done;
   const isDone = total === done;
   useEffect(
-    () => { if (isDone) setTimeout(reset, 4000); },
+    () => { if (isDone) { setTimeout(reset, 4000); }},
     [isDone]
   );
   return (

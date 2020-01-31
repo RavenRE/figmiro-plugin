@@ -9,10 +9,7 @@ export class MainController implements IController {
   @action.bound async initialFetch(): Promise<void> {
     try {
       this.fetching = true;
-      await Promise.all([
-        this.rootController.authController.checkToken(),
-        this.rootController.iconsController.fetchIcons()
-      ]);
+      await this.rootController.authController.checkToken();
     } finally {
       this.fetching = false;
     }

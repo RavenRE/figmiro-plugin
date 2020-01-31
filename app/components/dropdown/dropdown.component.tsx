@@ -1,7 +1,8 @@
 import React from 'react';
 import Select, {OptionsType, ValueType, ActionMeta, components, IndicatorProps} from 'react-select';
 import {WithClassName} from 'utils/WithClassName';
-import {Icon, IconName} from 'modules/icons';
+import {Icon} from 'components/icon';
+import arrow from './images/arrow.svg';
 import './dropdown.component.sass';
 
 type Props = {
@@ -20,7 +21,7 @@ export const Dropdown: React.FC<Props> = props =>
 
 const DropdownIndicator = (props: IndicatorProps<DDItem>) => (
   <components.DropdownIndicator {...props}>
-    <Icon name={IconName.ARROW}/>
+    <Icon src={arrow}/>
   </components.DropdownIndicator>
 );
 
