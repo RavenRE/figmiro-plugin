@@ -6,7 +6,7 @@ import styles from './auth.component.sass';
 export const AuthComponent: React.FC = () =>
   <Layout>
     <h1 className={styles.title}>
-      Log into Miro
+      Log into Miro Changes!!!!
     </h1>
     <AuthByLoginAndPasswordComponent/>
   </Layout>;
