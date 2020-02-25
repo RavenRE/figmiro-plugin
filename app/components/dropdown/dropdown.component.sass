@@ -9,10 +9,12 @@
     &__control
       border: 1px solid $cblack1 !important
 
-      &--is-focused
+      &--is-focused,
+      &--menu-is-open
         border-color: $cblue !important
 
       &--menu-is-open
+        box-shadow: 0 0 0 1px $cblue
         .dropdown__indicator
           transform: rotate(180deg)
 
@@ -29,9 +31,10 @@
       padding: 0 !important
 
     &__menu
+      margin-top: 2px !important
       width: auto !important
-      left: 1px
-      right: 1px
+      left: -1px
+      right: -1px
 
     &__menu-list
       padding: 0 !important
@@ -40,7 +43,9 @@
       background-color: transparent !important
       color: $cblack !important
 
-      &--is-focused,
       &--is-selected
         color: $cblue !important
 
+      &--is-focused
+        background-color: $cblue !important
+        color: $cwhite !important
