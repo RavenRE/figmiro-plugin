@@ -34,7 +34,7 @@ export class MainComponent extends React.Component {
     );
   }
 
-  async componentDidMount() {
+  async componentDidMount(): Promise<void> {
     const {
       authController,
       infoController,
@@ -45,11 +45,13 @@ export class MainComponent extends React.Component {
 
     if (!infoController.isInfoShown) {
       infoController.setInfoShownStatus();
-      return changeAppMenuItem(AppMenuItem.INFO);
+      changeAppMenuItem(AppMenuItem.INFO);
+      return;
     }
 
     if (authController.isAuth) {
-      return changeAppMenuItem(AppMenuItem.SYNC);
+      changeAppMenuItem(AppMenuItem.SYNC);
+      return;
     }
   }
 

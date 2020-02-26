@@ -2,7 +2,7 @@ $radius: 2.5em
 $thin: .3em
 
 .container,
-.container:after
+.container::after
   border-radius: 50%
   +size($radius)
 
@@ -21,8 +21,10 @@ $thin: .3em
 @keyframes load8
   0%
     transform: rotate(0deg)
+
   100%
     transform: rotate(360deg)
+
 
 .primary
   border-color: $cblack1
