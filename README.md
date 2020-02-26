@@ -14,7 +14,7 @@ With Figmiro, you and your team members will reduce the amount of manual frame e
 *Any ideas, issues and pull requests are welcome!*
 
 For local work on the plugin you need to follow the steps described in
-[server's](https://github.com/smth/readme) contribution readme block.
+[server's](https://github.com/RedMadRobot/figmiro-server) contribution readme block.
 
 Then execute
 ```shell script
