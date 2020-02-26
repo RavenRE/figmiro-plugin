@@ -2,6 +2,7 @@ import React from 'react';
 import cn from 'classnames';
 import {resize} from 'helpers/resize';
 import {connect} from 'helpers/connect';
+import {AppMenuItem} from 'modules/menu';
 import {getErrorMessage} from 'helpers/getErrorMessage';
 import {RootController} from 'rootController';
 import {Input} from 'components/input';
@@ -77,6 +78,7 @@ export class AuthByLoginAndPasswordComponent extends React.Component {
   private onSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     await this.controller.login();
+    this.rootController.menuController.changeAppMenuItem(AppMenuItem.SYNC);
   };
 
   private get error(): string | undefined {
@@ -101,6 +103,10 @@ export class AuthByLoginAndPasswordComponent extends React.Component {
   }
 
   private get controller() {
-    return (this.props as RootController).authByLoginAndPasswordController;
+    return this.rootController.authByLoginAndPasswordController;
+  }
+
+  private get rootController(): RootController {
+    return this.props as RootController;
   }
 }

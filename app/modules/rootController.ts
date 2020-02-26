@@ -7,6 +7,7 @@ import {SettingsController} from 'modules/settings';
 import {SettingsSelectionController} from 'modules/settings-selection';
 import {SettingsAdditionsController} from 'modules/settings-additions';
 import {MenuController} from 'modules/menu';
+import {InfoController} from 'modules/info';
 
 export class RootController {
   [key: string]: IController;
@@ -19,6 +20,7 @@ export class RootController {
   settingsAdditionsController: SettingsAdditionsController;
   settingsSelectionController: SettingsSelectionController;
   menuController: MenuController;
+  infoController: InfoController;
 
   constructor() {
     this.mainController = new MainController(this);
@@ -33,6 +35,8 @@ export class RootController {
     this.settingsSelectionController = new SettingsSelectionController(this);
 
     this.menuController = new MenuController();
+
+    this.infoController = new InfoController();
   }
 }
 

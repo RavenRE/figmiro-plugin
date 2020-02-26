@@ -10,6 +10,7 @@ export class MainController implements IController {
     try {
       this.fetching = true;
       await this.rootController.authController.checkAuth();
+      await this.rootController.infoController.checkInfoShownStatus();
     } finally {
       this.fetching = false;
     }

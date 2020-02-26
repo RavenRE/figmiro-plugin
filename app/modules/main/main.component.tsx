@@ -33,7 +33,22 @@ export class MainComponent extends React.Component {
   }
 
   async componentDidMount() {
-    await this.rootController.mainController.initialFetch();
+    const {
+      authController,
+      infoController,
+      mainController: {initialFetch},
+      menuController: {changeAppMenuItem}
+    } = this.rootController;
+    await initialFetch();
+
+    if (!infoController.isInfoShown) {
+      infoController.setInfoShownStatus();
+      return changeAppMenuItem(AppMenuItem.INFO);
+    }
+
+    if (authController.isAuth) {
+      return changeAppMenuItem(AppMenuItem.SYNC);
+    }
   }
 
   private get currentView(): React.ReactNode {

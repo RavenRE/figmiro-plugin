@@ -44,9 +44,6 @@ export class SettingsComponent extends React.Component {
           reset={resetDoneSyncStages}
           className={styles.progress}
         />
-        <div className={styles.title}>
-          Sync artboards with Miro
-        </div>
         <BoardsComponent/>
         <div className={styles.wrap}>
           <SettingsSelectionComponent className={styles['settings-item']}/>
