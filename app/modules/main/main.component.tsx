@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'helpers/connect';
 import {RootController} from 'rootController';
-import {AuthComponent} from 'modules/auth';
+import {AuthWrapComponent} from 'modules/auth-wrap';
 import {SettingsComponent} from 'modules/settings';
 import {InfoComponent} from 'modules/info';
 import {AppMenuItem} from 'modules/menu';
@@ -39,7 +39,7 @@ export class MainComponent extends React.Component {
   private get currentView(): React.ReactNode {
     const {selectedAppMenuItem} = this.rootController.menuController;
     const mapper = {
-      [AppMenuItem.ACCOUNT]: <AuthComponent/>,
+      [AppMenuItem.ACCOUNT]: <AuthWrapComponent/>,
       [AppMenuItem.SYNC]: <SettingsComponent/>,
       [AppMenuItem.INFO]: <InfoComponent/>
     };

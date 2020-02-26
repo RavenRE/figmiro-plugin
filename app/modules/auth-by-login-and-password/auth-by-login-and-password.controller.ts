@@ -27,6 +27,7 @@ export class AuthByLoginAndPasswordController implements IController {
       this.fetching = true;
       const token = await authByLoginAndPassword(this.credentials);
       this.rootController.authController.setToken(token);
+      this.rootController.authController.setUserInfo({email: this.credentials.email});
       this.reset();
     } catch (error) {
       this.error = error.status;
