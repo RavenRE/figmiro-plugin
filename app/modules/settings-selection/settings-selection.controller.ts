@@ -6,7 +6,7 @@ import {getSelectionTypes} from './settings-selection.service';
 
 export class SettingsSelectionController implements IController {
   selectionTypes = getSelectionTypes();
-  @observable selectionType = SettingsSelectionType.ALL;
+  @observable selectionType = SettingsSelectionType.SELECTED;
 
   constructor(private readonly rootController: RootController) {}
 
@@ -16,6 +16,6 @@ export class SettingsSelectionController implements IController {
   }
 
   @action.bound reset(): void {
-    this.selectionType = SettingsSelectionType.ALL;
+    this.selectionType = SettingsSelectionType.SELECTED;
   }
 }

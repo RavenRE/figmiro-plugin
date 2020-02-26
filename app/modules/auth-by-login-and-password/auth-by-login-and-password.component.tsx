@@ -2,15 +2,16 @@ import React from 'react';
 import cn from 'classnames';
 import {resize} from 'helpers/resize';
 import {connect} from 'helpers/connect';
+import {AppMenuItem} from 'modules/menu';
 import {getErrorMessage} from 'helpers/getErrorMessage';
 import {RootController} from 'rootController';
 import {Input} from 'components/input';
+import {Link} from 'components/link';
 import {Button, ButtonMode} from 'components/button';
 import {AuthByLoginAndPasswordErrorType} from './auth-by-login-and-password.errors';
 import styles from './auth-by-login-and-password.component.sass';
-import {Link} from 'components/link/link.component';
 
-const INITIAL_HEIGHT = 320;
+const INITIAL_HEIGHT = 346;
 
 @connect
 export class AuthByLoginAndPasswordComponent extends React.Component {
@@ -43,11 +44,9 @@ export class AuthByLoginAndPasswordComponent extends React.Component {
           className={styles.input}
           isError={this.isCommonError}
         />
-        <div className={styles.mention}>
-          To get or recover a password, go to <Link href="https://miro.com/recover/"/>
-        </div>
         <div className={cn(styles.error, styles['common-error'])}>{this.error}</div>
         <Button
+          className={styles.input}
           type="submit"
           mode={ButtonMode.PRIMARY}
           disabled={isLoginDisabled}
@@ -55,6 +54,9 @@ export class AuthByLoginAndPasswordComponent extends React.Component {
         >
           Login
         </Button>
+        <div className={styles.mention}>
+          Get or recover password - <Link href="https://miro.com/recover/"/>
+        </div>
       </form>
     );
   }
@@ -65,9 +67,9 @@ export class AuthByLoginAndPasswordComponent extends React.Component {
 
   componentDidUpdate(): void {
     if (this.isCommonError) {
-      resize({height: 352});
+      resize({height: INITIAL_HEIGHT + 32});
     } else if (this.isEmailError) {
-      resize({height: 328});
+      resize({height: INITIAL_HEIGHT + 8});
     } else {
       resize({height: INITIAL_HEIGHT});
     }
@@ -76,6 +78,7 @@ export class AuthByLoginAndPasswordComponent extends React.Component {
   private onSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     await this.controller.login();
+    this.rootController.menuController.changeAppMenuItem(AppMenuItem.SYNC);
   };
 
   private get error(): string | undefined {
@@ -100,6 +103,10 @@ export class AuthByLoginAndPasswordComponent extends React.Component {
   }
 
   private get controller() {
-    return (this.props as RootController).authByLoginAndPasswordController;
+    return this.rootController.authByLoginAndPasswordController;
+  }
+
+  private get rootController(): RootController {
+    return this.props as RootController;
   }
 }

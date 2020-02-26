@@ -9,7 +9,8 @@ export class MainController implements IController {
   @action.bound async initialFetch(): Promise<void> {
     try {
       this.fetching = true;
-      await this.rootController.authController.checkToken();
+      await this.rootController.authController.checkAuth();
+      await this.rootController.infoController.checkInfoShownStatus();
     } finally {
       this.fetching = false;
     }

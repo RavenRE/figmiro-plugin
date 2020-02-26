@@ -1,5 +1,4 @@
 import React from 'react';
-import cn from 'classnames';
 import {connect} from 'helpers/connect';
 import {resize} from 'helpers/resize';
 import {getErrorMessage} from 'helpers/getErrorMessage';
@@ -8,10 +7,8 @@ import {BoardsComponent} from 'modules/boards';
 import {SettingsSelectionComponent} from 'modules/settings-selection';
 import {SettingsAdditionsComponent} from 'modules/settings-additions';
 import {Button, ButtonMode} from 'components/button';
-import {Highlighted} from 'components/highlighted';
 import {Loader} from 'components/loader';
 import {Progress} from 'components/progress';
-import {Layout} from 'components/layout';
 import {SyncProgressStage} from './settings.entity';
 import {SyncErrorType} from './settings.errors';
 import styles from './settings.component.sass';
@@ -22,7 +19,6 @@ const INITIAL_SIZE = 376;
 export class SettingsComponent extends React.Component {
   render(): React.ReactNode {
     const {
-      authController: {logout},
       settingsController: {
         sync,
         fetching: syncFetching,
@@ -35,9 +31,15 @@ export class SettingsComponent extends React.Component {
         selectedBoard
       }
     } = this.rootController;
-    if (boardsFetching) return <Loader/>;
+    if (boardsFetching) {
+      return (
+        <div className={styles['loader-wrap']}>
+          <Loader/>
+        </div>
+      );
+    }
     return (
-      <Layout className={cn(styles.container, {[styles['is-sync']]: syncFetching})}>
+      <div className={styles.container}>
         <Progress
           error={this.error}
           done={doneStagesAmount}
@@ -47,16 +49,12 @@ export class SettingsComponent extends React.Component {
           reset={resetDoneSyncStages}
           className={styles.progress}
         />
-        <div className={styles.title}>
-          Sync artboards with Miro
-        </div>
         <BoardsComponent/>
         <div className={styles.wrap}>
           <SettingsSelectionComponent className={styles['settings-item']}/>
           <SettingsAdditionsComponent/>
         </div>
         <Button
-          className={styles.btn}
           mode={ButtonMode.PRIMARY}
           disabled={!selectedBoard}
           onClick={sync}
@@ -64,10 +62,7 @@ export class SettingsComponent extends React.Component {
         >
           Sync
         </Button>
-        <div className={styles.mention}>
-          Want to use a different account? <Highlighted onClick={logout}>Log out</Highlighted>
-        </div>
-      </Layout>
+      </div>
     );
   }
 
@@ -96,7 +91,7 @@ export class SettingsComponent extends React.Component {
     if (!error) return;
     return getErrorMessage<SyncErrorType>(
       {
-        [SyncErrorType.NO_ARTBOARDS_SELECTED]: 'There is no artboard selected',
+        [SyncErrorType.NO_ARTBOARDS_SELECTED]: 'Frames not selected',
         [SyncErrorType.NO_ARTBOARDS_AT_CANVAS]: 'There are no artboards at canvas'
       },
       error

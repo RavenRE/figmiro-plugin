@@ -1,0 +1,12 @@
+@import ../variables
+
+.container
+  padding: $padding-v 0
+  cursor: pointer
+
+  &:hover,
+  &.is-active
+    border-bottom: 3px solid $cblue
+
+  &.is-disabled
+    pointer-events: none
