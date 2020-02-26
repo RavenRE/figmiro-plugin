@@ -10,7 +10,7 @@ import {Button, ButtonMode} from 'components/button';
 import {AuthByLoginAndPasswordErrorType} from './auth-by-login-and-password.errors';
 import styles from './auth-by-login-and-password.component.sass';
 
-const INITIAL_HEIGHT = 320;
+const INITIAL_HEIGHT = 346;
 
 @connect
 export class AuthByLoginAndPasswordComponent extends React.Component {
@@ -66,9 +66,9 @@ export class AuthByLoginAndPasswordComponent extends React.Component {
 
   componentDidUpdate(): void {
     if (this.isCommonError) {
-      resize({height: 352});
+      resize({height: INITIAL_HEIGHT + 32});
     } else if (this.isEmailError) {
-      resize({height: 328});
+      resize({height: INITIAL_HEIGHT + 8});
     } else {
       resize({height: INITIAL_HEIGHT});
     }

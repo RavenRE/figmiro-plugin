@@ -34,9 +34,13 @@ export class MenuComponent extends React.Component<Props> {
             />
           )}
         </div>
-        <div className={styles.copyright}>
+        <a
+          className={styles.copyright}
+          href="https://redmadrobot.com"
+          target="_blank"
+        >
           by Redmadrobot
-        </div>
+        </a>
       </div>
     );
   }

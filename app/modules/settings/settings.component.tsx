@@ -8,7 +8,6 @@ import {BoardsComponent} from 'modules/boards';
 import {SettingsSelectionComponent} from 'modules/settings-selection';
 import {SettingsAdditionsComponent} from 'modules/settings-additions';
 import {Button, ButtonMode} from 'components/button';
-import {Highlighted} from 'components/highlighted';
 import {Loader} from 'components/loader';
 import {Progress} from 'components/progress';
 import {SyncProgressStage} from './settings.entity';
@@ -21,7 +20,6 @@ const INITIAL_SIZE = 376;
 export class SettingsComponent extends React.Component {
   render(): React.ReactNode {
     const {
-      authController: {logout},
       settingsController: {
         sync,
         fetching: syncFetching,
@@ -55,7 +53,6 @@ export class SettingsComponent extends React.Component {
           <SettingsAdditionsComponent/>
         </div>
         <Button
-          className={styles.btn}
           mode={ButtonMode.PRIMARY}
           disabled={!selectedBoard}
           onClick={sync}
@@ -63,9 +60,6 @@ export class SettingsComponent extends React.Component {
         >
           Sync
         </Button>
-        <div className={styles.mention}>
-          Want to use a different account? <Highlighted onClick={logout}>Log out</Highlighted>
-        </div>
       </div>
     );
   }
