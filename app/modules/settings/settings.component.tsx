@@ -1,5 +1,4 @@
 import React from 'react';
-import cn from 'classnames';
 import {connect} from 'helpers/connect';
 import {resize} from 'helpers/resize';
 import {getErrorMessage} from 'helpers/getErrorMessage';
@@ -32,9 +31,15 @@ export class SettingsComponent extends React.Component {
         selectedBoard
       }
     } = this.rootController;
-    if (boardsFetching) return <Loader/>;
+    if (boardsFetching) {
+      return (
+        <div className={styles['loader-wrap']}>
+          <Loader/>
+        </div>
+      );
+    }
     return (
-      <div className={cn(styles.container, {[styles['is-sync']]: syncFetching})}>
+      <>
         <Progress
           error={this.error}
           done={doneStagesAmount}
@@ -57,7 +62,7 @@ export class SettingsComponent extends React.Component {
         >
           Sync
         </Button>
-      </div>
+      </>
     );
   }
 

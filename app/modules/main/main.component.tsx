@@ -1,4 +1,5 @@
 import React from 'react';
+import cn from 'classnames';
 import {connect} from 'helpers/connect';
 import {RootController} from 'rootController';
 import {AuthWrapComponent} from 'modules/auth-wrap';
@@ -13,11 +14,12 @@ import styles from './main.component.sass';
 export class MainComponent extends React.Component {
   render(): React.ReactNode {
     const {
+      settingsController: {fetching: syncFetching},
       mainController: {fetching},
       menuController: {changeAppMenuItem, selectedAppMenuItem}
     } = this.rootController;
     return (
-      <div className={styles.container}>
+      <div className={cn(styles.container, {[styles['is-sync']]: syncFetching})}>
         {fetching ?
           <Loader/> :
           <Layout

@@ -1,40 +1,33 @@
-$thin: 1.5px
+$radius: 2.5em
+$thin: .3em
+
+.container,
+.container:after
+  border-radius: 50%
+  +size($radius)
 
 .container
-  position: relative
   margin: 0 auto
-  display: inline-block
-  +size(2.5em)
+  font-size: 10px
+  position: relative
+  border-top: $thin solid $cblack1
+  border-right: $thin solid $cblack1
+  border-bottom: $thin solid $cblack1
+  border-left: $thin solid $cblack
+  transform: translateZ(0)
+  -webkit-animation: load8 1.1s infinite linear
+  animation: load8 1.1s infinite linear
 
-.container div
-  box-sizing: border-box
-  display: block
-  position: absolute
-  +size(100%)
-  margin: $thin
-  border: $thin solid transparent
-  border-radius: 50%
-  animation: container 1.2s cubic-bezier(.5, 0, .5, 1) infinite
-
-.container div:nth-child(1)
-  animation-delay: -.45s
-
-.container div:nth-child(2)
-  animation-delay: -.3s
-
-.container div:nth-child(3)
-  animation-delay: -.15s
-
-@keyframes container
+@keyframes load8
   0%
     transform: rotate(0deg)
-
   100%
     transform: rotate(360deg)
 
+.primary
+  border-color: $cblack1
+  border-left-color: $cblack
 
-.primary div
-  border-top-color: $cblack
-
-.secondary div
-  border-top-color: $cwhite
+.secondary
+  border-color: $cwhite1
+  border-left-color: $cwhite

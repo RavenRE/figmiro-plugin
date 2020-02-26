@@ -21,9 +21,4 @@ export const Loader: React.FC<Props> = ({mode, className}) =>
         styles[mode || LoaderMode.PRIMARY]
       )
     }
-  >
-    <div/>
-    <div/>
-    <div/>
-    <div/>
-  </div>;
+  />;
