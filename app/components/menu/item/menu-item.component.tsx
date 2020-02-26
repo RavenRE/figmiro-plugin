@@ -6,6 +6,7 @@ import styles from './menu-item.component.sass';
 export type MenuItem = {
   id: string;
   label: string;
+  isDisabled: boolean;
 };
 
 export type OnMenuItemClick = (id: string) => void;
@@ -17,7 +18,7 @@ type Props = {
 } & WithClassName;
 
 export const MenuItemComponent: React.FC<Props> = ({
-  item: {label, id},
+  item: {label, id, isDisabled},
   onClick,
   isActive,
   className
@@ -27,8 +28,11 @@ export const MenuItemComponent: React.FC<Props> = ({
   }, []);
   return (
     <div
-      onClick={onItemClick}
-      className={cn(styles.container, className, {[styles['is-active']]: isActive})}
+      onClick={isDisabled ? undefined : onItemClick}
+      className={cn(styles.container, className, {
+        [styles['is-active']]: isActive,
+        [styles['is-disabled']]: isDisabled
+      })}
     >
       {label}
     </div>

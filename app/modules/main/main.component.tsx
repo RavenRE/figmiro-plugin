@@ -62,11 +62,17 @@ export class MainComponent extends React.Component {
   }
 
   private get menuItems(): MenuItems {
+    const {
+      authController: {isAuth}
+    } = this.rootController;
     const labelMapper = {
       [AppMenuItem.ACCOUNT]: 'Account',
       [AppMenuItem.INFO]: 'Info',
       [AppMenuItem.SYNC]: 'Sync'
     };
+    const disabledIfUnauth = [
+      AppMenuItem.SYNC
+    ];
     const sortOrder = [
       AppMenuItem.SYNC,
       AppMenuItem.INFO,
@@ -75,7 +81,8 @@ export class MainComponent extends React.Component {
     return this.rootController.menuController.appMenuItems
       .map(item => ({
         id: item,
-        label: labelMapper[item]
+        label: labelMapper[item],
+        isDisabled: !isAuth && disabledIfUnauth.includes(item)
       }))
       .sort((item, another) =>
         sortOrder.indexOf(item.id) - sortOrder.indexOf(another.id)
