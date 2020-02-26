@@ -13,7 +13,7 @@ import {SyncProgressStage} from './settings.entity';
 import {SyncErrorType} from './settings.errors';
 import styles from './settings.component.sass';
 
-const INITIAL_SIZE = 376;
+const INITIAL_SIZE = 360;
 
 @connect
 export class SettingsComponent extends React.Component {
