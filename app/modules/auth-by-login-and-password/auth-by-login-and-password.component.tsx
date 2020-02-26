@@ -5,10 +5,10 @@ import {connect} from 'helpers/connect';
 import {getErrorMessage} from 'helpers/getErrorMessage';
 import {RootController} from 'rootController';
 import {Input} from 'components/input';
+import {Link} from 'components/link';
 import {Button, ButtonMode} from 'components/button';
 import {AuthByLoginAndPasswordErrorType} from './auth-by-login-and-password.errors';
 import styles from './auth-by-login-and-password.component.sass';
-import {Link} from 'components/link/link.component';
 
 const INITIAL_HEIGHT = 320;
 
@@ -43,11 +43,9 @@ export class AuthByLoginAndPasswordComponent extends React.Component {
           className={styles.input}
           isError={this.isCommonError}
         />
-        <div className={styles.mention}>
-          To get or recover a password, go to <Link href="https://miro.com/recover/"/>
-        </div>
         <div className={cn(styles.error, styles['common-error'])}>{this.error}</div>
         <Button
+          className={styles.input}
           type="submit"
           mode={ButtonMode.PRIMARY}
           disabled={isLoginDisabled}
@@ -55,6 +53,9 @@ export class AuthByLoginAndPasswordComponent extends React.Component {
         >
           Login
         </Button>
+        <div className={styles.mention}>
+          Get or recover password - <Link href="https://miro.com/recover/"/>
+        </div>
       </form>
     );
   }

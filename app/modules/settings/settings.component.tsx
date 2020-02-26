@@ -11,7 +11,6 @@ import {Button, ButtonMode} from 'components/button';
 import {Highlighted} from 'components/highlighted';
 import {Loader} from 'components/loader';
 import {Progress} from 'components/progress';
-import {Layout} from 'components/layout';
 import {SyncProgressStage} from './settings.entity';
 import {SyncErrorType} from './settings.errors';
 import styles from './settings.component.sass';
@@ -37,7 +36,7 @@ export class SettingsComponent extends React.Component {
     } = this.rootController;
     if (boardsFetching) return <Loader/>;
     return (
-      <Layout className={cn(styles.container, {[styles['is-sync']]: syncFetching})}>
+      <div className={cn(styles.container, {[styles['is-sync']]: syncFetching})}>
         <Progress
           error={this.error}
           done={doneStagesAmount}
@@ -67,7 +66,7 @@ export class SettingsComponent extends React.Component {
         <div className={styles.mention}>
           Want to use a different account? <Highlighted onClick={logout}>Log out</Highlighted>
         </div>
-      </Layout>
+      </div>
     );
   }
 
