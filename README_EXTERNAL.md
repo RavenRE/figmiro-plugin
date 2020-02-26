@@ -6,8 +6,8 @@
 
 ## About plugin
 
-Exporting and synchronizing frames from Figma to Miro will allow you to quickly update layouts and offer new versions.
-With Figmiro, you and your team will reduce the amount of manual frame export work.
+Exporting and synchronizing frames from Figma to Miro will allow you to quickly update layouts and deliver new versions.
+With Figmiro, you and your team members will reduce the amount of manual frame export work.
 
 ## Contribution
 
