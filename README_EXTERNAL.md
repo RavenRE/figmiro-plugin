@@ -2,6 +2,8 @@
 
 # Figmiro plugin
 
+*Figma Integration with Miro (Plugin)*
+
 ## About plugin
 
 Exporting and synchronizing frames from Figma to Miro will allow you to quickly update layouts and offer new versions.
