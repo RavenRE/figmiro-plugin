@@ -39,7 +39,7 @@ export class SettingsComponent extends React.Component {
       );
     }
     return (
-      <>
+      <div className={styles.container}>
         <Progress
           error={this.error}
           done={doneStagesAmount}
@@ -62,7 +62,7 @@ export class SettingsComponent extends React.Component {
         >
           Sync
         </Button>
-      </>
+      </div>
     );
   }
 
@@ -91,7 +91,7 @@ export class SettingsComponent extends React.Component {
     if (!error) return;
     return getErrorMessage<SyncErrorType>(
       {
-        [SyncErrorType.NO_ARTBOARDS_SELECTED]: 'There is no artboard selected',
+        [SyncErrorType.NO_ARTBOARDS_SELECTED]: 'Frames not selected',
         [SyncErrorType.NO_ARTBOARDS_AT_CANVAS]: 'There are no artboards at canvas'
       },
       error
